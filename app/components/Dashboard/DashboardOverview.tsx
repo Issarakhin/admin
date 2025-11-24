@@ -379,7 +379,7 @@ const DashboardOverview = () => {
             <div className="flex flex-col items-center justify-center space-y-2">
               <Image src={quiz} width={50} height={50} alt="Quiz icon" />
               <span style={{fontWeight: 400, fontSize: 14, color: "#6e737c"}}>Quizzes</span>
-              <span style={{color: '#2c3e50', fontSize: 16, fontWeight: 700}}>{totalQuizCount || N/A}</span>
+              <span style={{color: '#2c3e50', fontSize: 16, fontWeight: 700}}>{totalQuizCount}</span>
             </div>
             <div className="flex flex-col items-center justify-center space-y-2">
               <Image src={certificate} width={50} height={50} alt="Certificate icon" />
