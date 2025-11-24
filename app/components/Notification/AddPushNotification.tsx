@@ -1,5 +1,6 @@
 // src/components/PushNotification.tsx
 import React, { useCallback, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useDropzone } from 'react-dropzone';
 import { collection, doc, setDoc, getDocs, query, Timestamp, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -170,7 +171,7 @@ const PushNotification = () => {
       setNotifName('');
       setModalType('success');
       setModalMessage(sendNow ? 'Notification sent!' : 'Draft saved');
-    } catch (err: any) {
+    } catch (err: unknown) {
       setModalType('error');
       setModalMessage(err.message);
     } finally {
