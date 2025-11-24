@@ -48,34 +48,34 @@ const DashboardOverview = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
-useEffect(() => {
-  const fetchQuizzes = async () => {
-    try {
-      const coursesRef = collection(db, "courses");
-      const courseSnapshot = await getDocs(coursesRef);
-      let totalQuizzes = 0;
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        const coursesRef = collection(db, "courses");
+        const courseSnapshot = await getDocs(coursesRef);
+        let totalQuizzes = 0;
 
-      courseSnapshot.forEach((courseDoc) => {
-        const data = courseDoc.data();
+        courseSnapshot.forEach((courseDoc) => {
+          const data = courseDoc.data();
 
         // Debug: see what quiz looks like
-        console.log("course:", courseDoc.id, "quiz =", data.quiz);
+          console.log("course:", courseDoc.id, "quiz =", data.quiz);
 
         // Count this course if it has a quiz field (map)
-        if (data.quiz !== undefined && data.quiz !== null) {
-          totalQuizzes += 1;
-        }
-      });
+          if (data.quiz !== undefined && data.quiz !== null) {
+            totalQuizzes += 1;
+          }
+        });
 
-      console.log("TOTAL QUIZZES:", totalQuizzes);
-      setQuizCount(totalQuizzes);
-    } catch (error) {
-      console.error("Error fetching quizzes:", error);
-    }
-  };
+        console.log("TOTAL QUIZZES:", totalQuizzes);
+        setQuizCount(totalQuizzes);
+     } catch (error) {
+       console.error("Error fetching quizzes:", error);
+     }
+   };
 
-  fetchQuizzes();
-}, []);
+   fetchQuizzes();
+  }, []);
 
 
   useEffect(() => {
