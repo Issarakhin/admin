@@ -39,6 +39,8 @@ const DashboardOverview = () => {
   const [quizCount, setQuizCount] = useState(0);
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [certificateCount, setCertificateCount] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -152,6 +154,57 @@ const DashboardOverview = () => {
 
     fetchEnrollments();
   }, []);
+
+  useEffect(() => {
+    const calculateTotalRevenue = async () => {
+      try {
+        const usersSnapshot = await getDocs(collection(db, 'users'));
+        let sum = 0;
+
+        usersSnapshot.forEach((userDoc) => {
+         const userData = userDoc.data() as {
+            enrollment?: {
+              items?: { price?: number | string }[];
+            }[];
+          };
+
+          if (Array.isArray(userData.enrollment)) {
+            userData.enrollment.forEach((enrollment) => {
+              if (Array.isArray(enrollment.items)) {
+                enrollment.items.forEach((item) => {
+                 if (!item) return;
+
+                 let priceNumber = 0;
+
+                // price inside item (number or string)
+                 if (typeof item.price === 'number') {
+                   priceNumber = item.price;
+                 } else if (typeof item.price === 'string') {
+                   const parsed = parseFloat(item.price);
+                   if (!isNaN(parsed)) {
+                    priceNumber = parsed;
+                   }
+                 }
+
+                // ignore NaN / “Free”
+                 if (!isNaN(priceNumber)) {
+                  sum += priceNumber;
+                 }
+              });
+             }
+           });
+          }
+        });
+
+        setTotalRevenue(sum);
+      } catch (error) {
+        console.error('Error calculating total revenue:', error);
+      }
+    };
+
+    calculateTotalRevenue();
+  }, []);
+
 
   // Calculate the total pages
   const totalPages = Math.ceil(enrollments.length / itemsPerPage);
@@ -267,7 +320,10 @@ const DashboardOverview = () => {
             <div className="flex flex-col items-center justify-center space-y-2">
               <Image src={moneyReceived} width={50} height={50} alt="Money received icon" />
               <h3 style={{fontWeight: 400, fontSize: 14, color: "#6e737c"}}>Transactions</h3>
-              <p className=" mt-1" style={{color: '#2c3e50', fontSize: 16, fontWeight: 700}}>$12,426</p>
+              <p className=" mt-1" style={{color: '#2c3e50', fontSize: 16, fontWeight: 700}}>  ${totalRevenue.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}</p>
             </div>
             <div className="flex flex-col items-center justify-center space-y-2">
               <Image src={students} width={50} height={50} alt="Students icon" />
