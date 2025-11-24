@@ -40,11 +40,39 @@ const DashboardOverview = () => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [certificateCount, setCertificateCount] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
+  const [totalQuizCount, setTotalQuizCount] = useState(0);
+
 
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+
+  useEffect(() => {
+    const countCourseQuizzes = async () => {
+    try {
+      const coursesSnapshot = await getDocs(collection(db, "courses"));
+      let count = 0;
+
+      coursesSnapshot.forEach((courseDoc) => {
+        const data = courseDoc.data();
+
+        // quiz exists (map/object)
+        if (data.quiz) {
+          count += 1;
+        }
+      });
+
+      setTotalQuizCount(count);
+    } catch (error) {
+      console.error("Error counting quizzes:", error);
+    }
+  };
+
+  countCourseQuizzes();
+
+
+  }, []);
 
   useEffect(() => {
     const fetchCertificates = async () => {
@@ -205,6 +233,8 @@ const DashboardOverview = () => {
     calculateTotalRevenue();
   }, []);
 
+  use
+
 
   // Calculate the total pages
   const totalPages = Math.ceil(enrollments.length / itemsPerPage);
@@ -311,6 +341,7 @@ const DashboardOverview = () => {
           style={{
             boxShadow: '0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)',
             borderRadius: 15,
+            justifyContent: 'center';
           }}
         >
           <h1 style={{ paddingBottom: 15, textAlign: 'center', color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>
@@ -337,7 +368,7 @@ const DashboardOverview = () => {
           }}
         >
           <h1 style={{ paddingBottom: 15, textAlign: 'center', color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>
-            CONTENT NUMBER
+            CONTENT
           </h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="flex flex-col items-center justify-center space-y-2">
@@ -348,7 +379,7 @@ const DashboardOverview = () => {
             <div className="flex flex-col items-center justify-center space-y-2">
               <Image src={quiz} width={50} height={50} alt="Quiz icon" />
               <span style={{fontWeight: 400, fontSize: 14, color: "#6e737c"}}>Quizzes</span>
-              <span style={{color: '#2c3e50', fontSize: 16, fontWeight: 700}}>{quizCount}</span>
+              <span style={{color: '#2c3e50', fontSize: 16, fontWeight: 700}}>{totalQuizCount}</span>
             </div>
             <div className="flex flex-col items-center justify-center space-y-2">
               <Image src={certificate} width={50} height={50} alt="Certificate icon" />
