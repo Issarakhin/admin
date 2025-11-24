@@ -48,8 +48,8 @@ const DashboardOverview = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
- useEffect(() => {
-  const countCourseQuizzes = async () => {
+  useEffect(() => {
+    const countCourseQuizzes = async () => {
     try {
       const coursesSnapshot = await getDocs(collection(db, "courses"));
       let count = 0;
@@ -70,8 +70,6 @@ const DashboardOverview = () => {
   };
 
   countCourseQuizzes();
-}, []);
-
 
 
   }, []);
@@ -235,9 +233,6 @@ const DashboardOverview = () => {
     calculateTotalRevenue();
   }, []);
 
-
-
-
   // Calculate the total pages
   const totalPages = Math.ceil(enrollments.length / itemsPerPage);
 
@@ -343,7 +338,7 @@ const DashboardOverview = () => {
           style={{
             boxShadow: '0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)',
             borderRadius: 15,
-            justifyContent: 'center'
+            justifyContent: 'center';
           }}
         >
           <h1 style={{ paddingBottom: 15, textAlign: 'center', color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>
