@@ -49,32 +49,31 @@ const DashboardOverview = () => {
   const [itemsPerPage] = useState(5);
 
   useEffect(() => {
-    const fetchQuizzes = async () => {
+    const countCourseQuizzes = async () => {
       try {
-        const coursesRef = collection(db, "courses");
-        const courseSnapshot = await getDocs(coursesRef);
-        let totalQuizzes = 0;
+        const coursesSnapshot = await getDocs(collection(db, "courses"));
+        let count = 0;
 
-        courseSnapshot.forEach((courseDoc) => {
-          const data = courseDoc.data();
+        coursesSnapshot.forEach((docSnap) => {
+          const data = docSnap.data();
 
-        // Debug: see what quiz looks like
-          console.log("course:", courseDoc.id, "quiz =", data.quiz);
+        // Log to debug
+          console.log("Course:", docSnap.id, "Quiz field:", data.quiz);
 
-        // Count this course if it has a quiz field (map)
-          if (data.quiz !== undefined && data.quiz !== null) {
-            totalQuizzes += 1;
+        // Count if quiz field exists and is an object/map
+          if (data.quiz && typeof data.quiz === "object") {
+            count += 1;
           }
         });
 
-        console.log("TOTAL QUIZZES:", totalQuizzes);
-        setQuizCount(totalQuizzes);
-     } catch (error) {
-       console.error("Error fetching quizzes:", error);
-     }
-   };
+        console.log("Total quizzes:", count);
+        setQuizCount(count);
+      } catch (error) {
+        console.error("Error counting quiz fields:", error);
+      }
+    };
 
-   fetchQuizzes();
+    countCourseQuizzes();
   }, []);
 
 
