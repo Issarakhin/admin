@@ -48,8 +48,8 @@ const DashboardOverview = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
-  useEffect(() => {
-    const countCourseQuizzes = async () => {
+ useEffect(() => {
+  const countCourseQuizzes = async () => {
     try {
       const coursesSnapshot = await getDocs(collection(db, "courses"));
       let count = 0;
@@ -70,6 +70,8 @@ const DashboardOverview = () => {
   };
 
   countCourseQuizzes();
+}, []);
+
 
 
   }, []);
