@@ -173,7 +173,15 @@ const PushNotification = () => {
       setModalMessage(sendNow ? 'Notification sent!' : 'Draft saved');
     } catch (err: unknown) {
       setModalType('error');
-      setModalMessage(err.message);
+
+      const message =
+        err instanceof Error
+          ? err.message
+          : typeof err === 'string'
+          ? err
+          : 'Something went wrong';
+
+      setModalMessage(message);
     } finally {
       setModalOpen(true);
       setLoading(false);
