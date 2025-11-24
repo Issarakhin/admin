@@ -70,8 +70,6 @@ const DashboardOverview = () => {
   };
 
   countCourseQuizzes();
-
-
   }, []);
 
   useEffect(() => {
