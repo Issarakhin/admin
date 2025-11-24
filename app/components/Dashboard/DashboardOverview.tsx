@@ -48,29 +48,35 @@ const DashboardOverview = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
-  useEffect(() => {
-    const countCourseQuizzes = async () => {
+useEffect(() => {
+  const fetchQuizzes = async () => {
     try {
-      const coursesSnapshot = await getDocs(collection(db, "courses"));
-      let count = 0;
+      const coursesRef = collection(db, "courses");
+      const courseSnapshot = await getDocs(coursesRef);
+      let totalQuizzes = 0;
 
-      coursesSnapshot.forEach((courseDoc) => {
+      courseSnapshot.forEach((courseDoc) => {
         const data = courseDoc.data();
 
-        // quiz exists (map/object)
-        if (data.quiz) {
-          count += 1;
+        // Debug: see what quiz looks like
+        console.log("course:", courseDoc.id, "quiz =", data.quiz);
+
+        // Count this course if it has a quiz field (map)
+        if (data.quiz !== undefined && data.quiz !== null) {
+          totalQuizzes += 1;
         }
       });
 
-      setTotalQuizCount(count);
+      console.log("TOTAL QUIZZES:", totalQuizzes);
+      setQuizCount(totalQuizzes);
     } catch (error) {
-      console.error("Error counting quizzes:", error);
+      console.error("Error fetching quizzes:", error);
     }
   };
 
-  countCourseQuizzes();
-  }, []);
+  fetchQuizzes();
+}, []);
+
 
   useEffect(() => {
     const fetchCertificates = async () => {
