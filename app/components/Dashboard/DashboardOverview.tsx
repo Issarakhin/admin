@@ -314,7 +314,7 @@ const DashboardOverview = () => {
           }}
         >
           <h1 style={{ paddingBottom: 15, textAlign: 'center', color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>
-            TOTAL NUMBER
+            
           </h1>
           <div className="grid grid-cols-2 gap-6">
             <div className="flex flex-col items-center justify-center space-y-2">
@@ -324,11 +324,6 @@ const DashboardOverview = () => {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}</p>
-            </div>
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <Image src={students} width={50} height={50} alt="Students icon" />
-              <h3 style={{fontWeight: 400, fontSize: 14, color: "#6e737c"}}>Students</h3>
-              <p className=" mt-1" style={{color: '#2c3e50', fontSize: 16, fontWeight: 700}}>{totalStudents}</p>
             </div>
           </div>
         </div>
