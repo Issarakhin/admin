@@ -38,7 +38,14 @@ interface FirebaseError {
 
 interface Module {
   title: string;
-  lessons: { title: string; videoUrl: string; pdfUrl?: string;  description: string }[];
+  lessons: {
+    title: string;
+    videoUrl: string;
+    pdfUrl?: string;
+    description: string;
+    contentType?: 'video' | 'pdf';
+    content?: string;
+  }[];
   quiz: { questions: Question[] };
   isExpanded: boolean;
 }
