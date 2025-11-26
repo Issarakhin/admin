@@ -62,20 +62,19 @@ const DashboardOverview = () => {
 
     //completion state
   useEffect(() => {
-    // reference to userProgress
     const completeRef = collection(db, 'userProgress');
 
     const unsubscribe = onSnapshot(completeRef, (completeSnapshot) => {
-      const run = async () => {
-        try {
-          const complete = completeSnapshot.docs.map(async (completeDoc) => {
-            const docId = completeDoc.id;
-            const data = completeDoc.data() as UserProgressDoc;
+    const run = async () => {
+       try {
+         const complete = completeSnapshot.docs.map(async (completeDoc) => {
+           const docId = completeDoc.id;
+           const data = completeDoc.data() as UserProgressDoc;
 
           // userProgress doc id = userId_courseId  → take part before "_"
-            const userId = docId.includes('_') ? docId.split('_')[0] : docId;
+           const userId = docId.includes('_') ? docId.split('_')[0] : docId;
 
-            const userDoc = await getDoc(doc(db, 'users', userId));
+           const userDoc = await getDoc(doc(db, 'users', userId));
             if (!userDoc.exists()) {
               return { exists: false, completed: false, hasProgress: false };
             }
@@ -89,9 +88,9 @@ const DashboardOverview = () => {
 
             return { exists: true, completed, hasProgress };
           });
-  
+
           const Results = await Promise.all(complete);
-  
+
           let completed = 0;
           let inProgress = 0;
           let notStarted = 0;
@@ -117,9 +116,9 @@ const DashboardOverview = () => {
       run();
     });
 
-    // cleanup listener on unmount
     return () => unsubscribe();
   }, []);
+
 
 
   //completion state
