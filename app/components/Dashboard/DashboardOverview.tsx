@@ -34,6 +34,11 @@ interface FirestoreEnrollment {
   enrolledAt: string;
 }
 
+interface UserProgressDoc {
+  completedCourse?: boolean;
+  completedLessons?: unknown;
+}
+
 const DashboardOverview = () => {
   const [totalStudents, setTotalStudents] = useState(0);
   const [coursesCount, setCoursesCount] = useState(0);
@@ -65,7 +70,7 @@ const DashboardOverview = () => {
         try {
           const complete = completeSnapshot.docs.map(async (completeDoc) => {
             const docId = completeDoc.id;
-            const data = completeDoc.data() as any;
+            const data = completeDoc.data() as UserProgressDoc;
 
           // userProgress doc id = userId_courseId  → take part before "_"
             const userId = docId.includes('_') ? docId.split('_')[0] : docId;
