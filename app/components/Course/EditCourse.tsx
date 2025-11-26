@@ -100,10 +100,10 @@ export default function EditCourse({ courseId, onClose, onUpdate }: EditCoursePr
             // 👇 NEW PART: normalize modules / lessons
           const normalizedModules: { [key: string]: Module } = {};
           Object.entries(data.modules || {}).forEach(([key, mod]) => {
-            const m = mod as any;
+            const m = mod as Module;
             normalizedModules[key] = {
               ...m,
-              lessons: (m.lessons || []).map((lesson: any) => ({
+              lessons: (m.lessons || []).map((lesson) => ({
                 title: lesson.title || '',
                 content: lesson.content || '',
                 videoUrl: lesson.videoUrl || '',
