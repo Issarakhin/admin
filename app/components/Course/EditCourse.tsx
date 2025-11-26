@@ -30,6 +30,8 @@ interface Lesson {
   title: string;
   content: string;
   videoUrl?: string; // Added optional videoUrl to match usage
+  pdfUrl?: string;
+  contentType?: 'video' | 'pdf';
 }
 
 interface Course {
@@ -94,6 +96,24 @@ export default function EditCourse({ courseId, onClose, onUpdate }: EditCoursePr
 
         if (courseSnap.exists()) {
           const data = courseSnap.data() as Course;
+
+            // 👇 NEW PART: normalize modules / lessons
+          const normalizedModules: { [key: string]: Module } = {};
+          Object.entries(data.modules || {}).forEach(([key, mod]) => {
+            const m = mod as any;
+            normalizedModules[key] = {
+              ...m,
+              lessons: (m.lessons || []).map((lesson: any) => ({
+                title: lesson.title || '',
+                content: lesson.content || '',
+                videoUrl: lesson.videoUrl || '',
+                pdfUrl: lesson.pdfUrl || '',
+                contentType: lesson.contentType || (lesson.pdfUrl ? 'pdf' : 'video'),
+              })),
+            };
+          });
+
+
           setCourse({
             courseTitle: data.courseTitle || '',
             categories: data.categories || '',
@@ -103,7 +123,7 @@ export default function EditCourse({ courseId, onClose, onUpdate }: EditCoursePr
             isActive: data.isActive ?? true,
             thumbnail: data.thumbnail || '',
             profileimg: data.profileimg || '',
-            modules: data.modules || {},
+            modules: normalizedModules,
           });
           setIsFree(data.price === 0);
         } else {
@@ -190,7 +210,7 @@ export default function EditCourse({ courseId, onClose, onUpdate }: EditCoursePr
         ...prev.modules,
         [moduleKey]: {
           ...prev.modules[moduleKey],
-          lessons: [...prev.modules[moduleKey].lessons, { title: '', content: '', videoUrl: '' }]
+          lessons: [...prev.modules[moduleKey].lessons, { title: '', content: '', videoUrl: '',pdfUrl: '', contentType: 'video', }]
         }
       }
     }));
@@ -216,7 +236,7 @@ export default function EditCourse({ courseId, onClose, onUpdate }: EditCoursePr
 
     try {
       const courseRef = doc(db, 'courses', courseId);
-      // Ensure course is a plain object compatible with Firestore
+
       const courseData = {
         courseTitle: course.courseTitle,
         categories: course.categories,
@@ -230,15 +250,18 @@ export default function EditCourse({ courseId, onClose, onUpdate }: EditCoursePr
           acc[key] = {
             title: course.modules[key].title,
             description: course.modules[key].description,
-            lessons: course.modules[key].lessons.map(lesson => ({
+            lessons: course.modules[key].lessons.map((lesson) => ({
               title: lesson.title,
               content: lesson.content,
               videoUrl: lesson.videoUrl || '',
+              pdfUrl: lesson.pdfUrl || '',
+              contentType: lesson.contentType || (lesson.pdfUrl ? 'pdf' : 'video'),
             })),
           };
           return acc;
         }, {} as { [key: string]: Module }),
       };
+
       await updateDoc(courseRef, courseData);
       onUpdate();
       onClose();
@@ -249,6 +272,7 @@ export default function EditCourse({ courseId, onClose, onUpdate }: EditCoursePr
       setLoading(false);
     }
   };
+
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
@@ -481,13 +505,46 @@ export default function EditCourse({ courseId, onClose, onUpdate }: EditCoursePr
                               <Input
                                 placeholder="Lesson Description"
                                 value={lesson.content}
-                                onChange={(e) => handleLessonChange(moduleKey, lessonIndex, 'content', e.target.value)}
+                                onChange={(e) =>
+                                  handleLessonChange(moduleKey, lessonIndex, 'content', e.target.value)
+                                }
                               />
-                              <Input
-                                placeholder="Lesson Video URL"
-                                value={lesson.videoUrl || ''}
-                                onChange={(e) => handleLessonChange(moduleKey, lessonIndex, 'videoUrl', e.target.value)}
-                              />
+
+                              <div className="flex items-center gap-4">
+                                <Label className="text-sm">Content Type:</Label>
+                                <Select
+                                  value={lesson.contentType || 'video'}
+                                  onValueChange={(value: 'video' | 'pdf') =>
+                                    handleLessonChange(moduleKey, lessonIndex, 'contentType', value)
+                                  }
+                                >
+                                  <SelectTrigger className="w-32">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="video">Video</SelectItem>
+                                    <SelectItem value="pdf">PDF</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+
+                              {(lesson.contentType || 'video') === 'video' ? (
+                                <Input
+                                  placeholder="Lesson Video URL"
+                                  value={lesson.videoUrl || ''}
+                                  onChange={(e) =>
+                                    handleLessonChange(moduleKey, lessonIndex, 'videoUrl', e.target.value)
+                                  }
+                                />
+                              ) : (
+                                <Input
+                                  placeholder="Lesson PDF URL"
+                                  value={lesson.pdfUrl || ''}
+                                  onChange={(e) =>
+                                    handleLessonChange(moduleKey, lessonIndex, 'pdfUrl', e.target.value)
+                                  }
+                                />
+                              )}
                             </div>
                           ))}
                         </div>
