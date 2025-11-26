@@ -513,7 +513,21 @@ const UploadCourseForm: React.FC = () => {
     setCourseData((prevState) => {
       const updatedModules = { ...prevState.modules };
       const currentLessons = updatedModules[moduleKey].lessons || [];
-      const newLesson = { title: '', videoUrl: '',pdfUrl: '', description: '', contentType: 'video'};
+      const newLesson: {
+        title: string;
+        videoUrl: string;
+        pdfUrl?: string;
+        description: string;
+        contentType: 'video' | 'pdf';
+        content?: string;
+      } = {
+        title: '',
+        videoUrl: '',
+        pdfUrl: '',
+        description: '',
+        contentType: 'video',
+      };
+
       if (
         currentLessons.length > 0 &&
         JSON.stringify(currentLessons[currentLessons.length - 1]) === JSON.stringify(newLesson)
