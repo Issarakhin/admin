@@ -38,7 +38,7 @@ interface FirebaseError {
 
 interface Module {
   title: string;
-  lessons: { title: string; videoUrl: string; description: string }[];
+  lessons: { title: string; videoUrl: string; pdfUrl?: string;  description: string }[];
   quiz: { questions: Question[] };
   isExpanded: boolean;
 }
@@ -506,7 +506,7 @@ const UploadCourseForm: React.FC = () => {
     setCourseData((prevState) => {
       const updatedModules = { ...prevState.modules };
       const currentLessons = updatedModules[moduleKey].lessons || [];
-      const newLesson = { title: '', videoUrl: '', description: '' };
+      const newLesson = { title: '', videoUrl: '',pdfUrl: '', description: '', contentType: 'video'};
       if (
         currentLessons.length > 0 &&
         JSON.stringify(currentLessons[currentLessons.length - 1]) === JSON.stringify(newLesson)
@@ -1301,20 +1301,96 @@ const UploadCourseForm: React.FC = () => {
                                     style={{ borderRadius: 15, backgroundColor: "#fff", color: "#2c3e50", fontWeight: 400, fontSize: 15, marginTop: 10 }}
                                   />
                                 </div>
-                                <div>
+                                {/* Content type selector */}
+                                <div className="mt-2">
                                   <Label style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
-                                    Video URL:
+                                    Lesson Content Type:
                                   </Label>
-                                  <Input
-                                    value={lesson.videoUrl || ''}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                      handleLessonChange(moduleKey, lessonIndex, 'videoUrl', e.target.value)
+                                  <Select
+                                    value={lesson.contentType || 'video'}
+                                     onValueChange={(value: string) =>
+                                     handleLessonChange(moduleKey, lessonIndex, 'contentType', value)
                                     }
-                                    className="w-full"
-                                    placeholder="Type video URL"
-                                    style={{ borderRadius: 15, backgroundColor: "#fff", color: "#2c3e50", fontWeight: 400, fontSize: 15, marginTop: 10 }}
-                                  />
+                                  >
+                                  <SelectTrigger
+                                      style={{
+                                        borderRadius: 15,
+                                        backgroundColor: "#fff",
+                                        color: "#2c3e50",
+                                        fontWeight: 400,
+                                        fontSize: 15,
+                                        marginTop: 10,
+                                      }}
+                                    >
+                                      <SelectValue placeholder="Select content type" />
+                                    </SelectTrigger>
+                                    <SelectContent
+                                      style={{ borderRadius: 15, backgroundColor: "#fff", color: "#2c3e50" }}
+                                    >
+                                      <SelectItem
+                                        value="video"
+                                        className="hover:bg-[#F97E38] hover:text-[#fff]"
+                                        style={{ borderRadius: 13 }}
+                                      >
+                                        Video
+                                      </SelectItem>
+                                      <SelectItem
+                                        value="pdf"
+                                        className="hover:bg-[#F97E38] hover:text-[#fff]"
+                                        style={{ borderRadius: 13 }}
+                                      >
+                                        PDF
+                                      </SelectItem>
+                                    </SelectContent>
+                                  </Select>
                                 </div>
+
+                                {/* Show Video URL OR PDF URL depending on choice */}
+                                {(lesson.contentType || 'video') === 'video' ? (
+                                  <div>
+                                    <Label style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                                      Video URL:
+                                    </Label>
+                                    <Input
+                                      value={lesson.videoUrl || ''}
+                                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        handleLessonChange(moduleKey, lessonIndex, 'videoUrl', e.target.value)
+                                      }
+                                      className="w-full"
+                                      placeholder="Paste video URL (YouTube, Dropbox, etc.)"
+                                      style={{
+                                        borderRadius: 15,
+                                        backgroundColor: "#fff",
+                                        color: "#2c3e50",
+                                        fontWeight: 400,
+                                        fontSize: 15,
+                                        marginTop: 10,
+                                      }}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div>
+                                    <Label style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                                      PDF URL:
+                                    </Label>
+                                    <Input
+                                      value={lesson.pdfUrl || ''}
+                                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        handleLessonChange(moduleKey, lessonIndex, 'pdfUrl', e.target.value)
+                                      }
+                                      className="w-full"
+                                      placeholder="Paste PDF link (Dropbox, etc.)"
+                                      style={{
+                                        borderRadius: 15,
+                                        backgroundColor: "#fff",
+                                        color: "#2c3e50",
+                                        fontWeight: 400,
+                                        fontSize: 15,
+                                        marginTop: 10,
+                                      }}
+                                    />
+                                  </div>
+                                )}
                                 <div>
                                   <Label style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                                     Description:
