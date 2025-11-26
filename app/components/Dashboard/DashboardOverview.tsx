@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
 import React, { useEffect, useState } from 'react';
-import { BarChart, Bar, ResponsiveContainer } from 'recharts';
-import { collection, getDocs } from '@firebase/firestore';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+
+import { collection, getDocs, getDoc, doc, onSnapshot } from '@firebase/firestore';
 import { db } from '@/app/lib/config/firebase';
 import { DateTime } from 'luxon';
 import Image from 'next/image';
@@ -46,42 +43,106 @@ const DashboardOverview = () => {
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [totalQuizCount, setTotalQuizCount] = useState(0);
 
+  const [completionStats, setCompletionStats] = useState({
+    completed: 0,
+    inProgress: 0,
+    notStarted: 0,
+  });
+
 
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
+  //completion state
   useEffect(() => {
-    const fetchQuizCount = async () => {
-    try {
-      const coursesSnap = await getDocs(collection(db, "courses"));
-      let total = 0;
+    // reference to userProgress
+    const completeRef = collection(db, 'userProgress');
 
-      coursesSnap.forEach((courseDoc) => {
-        const data = courseDoc.data();
-        const modules = data.modules;
+    const unsubscribe = onSnapshot(completeRef, (completeSnapshot) => {
+      const run = async () => {
+        try {
+          const complete = completeSnapshot.docs.map(async (completeDoc) => {
+            const docId = completeDoc.id;
+            const data = completeDoc.data() as any;
 
-        if (modules && typeof modules === "object") {
-          Object.values(modules).forEach((module: any) => {
-            if (module.quiz && typeof module.quiz === "object") {
-              total += 1; // count this module’s quiz
+          // userProgress doc id = userId_courseId  → take part before "_"
+            const userId = docId.includes('_') ? docId.split('_')[0] : docId;
+
+            const userDoc = await getDoc(doc(db, 'users', userId));
+            if (!userDoc.exists()) {
+              return { exists: false, completed: false, hasProgress: false };
+            }
+
+            const completed = data.completedCourse === true;
+
+            const completedLessons = Array.isArray(data.completedLessons)
+              ? data.completedLessons
+              : [];
+            const hasProgress = completedLessons.length > 0;
+
+            return { exists: true, completed, hasProgress };
+          });
+  
+          const Results = await Promise.all(complete);
+  
+          let completed = 0;
+          let inProgress = 0;
+          let notStarted = 0;
+
+          Results.forEach((r) => {
+            if (!r.exists) return;
+
+            if (r.completed) {
+              completed++;
+            } else if (r.hasProgress) {
+              inProgress++;
+            } else {
+              notStarted++;
             }
           });
+
+          setCompletionStats({ completed, inProgress, notStarted });
+        } catch (error) {
+          console.log('Error fetching completion stats:', error);
         }
-      });
+      };
 
-      console.log("TOTAL QUIZ COUNT:", total);
-      setTotalQuizCount(total);
-     } catch (error) {
-      console.error("Error counting quizzes:", error);
-     }
-   };
+      run();
+    });
 
-   fetchQuizCount();
+    // cleanup listener on unmount
+    return () => unsubscribe();
   }, []);
 
 
+
+  useEffect(() => {
+    const countCourseQuizzes = async () => {
+    try {
+      const coursesSnapshot = await getDocs(collection(db, "courses"));
+      let count = 0;
+
+      coursesSnapshot.forEach((courseDoc) => {
+        const data = courseDoc.data();
+
+        // quiz exists (map/object)
+        if (data.quiz) {
+          count += 1;
+        }
+      });
+
+      setTotalQuizCount(count);
+    } catch (error) {
+      console.error("Error counting quizzes:", error);
+    }
+  };
+
+  countCourseQuizzes();
+
+
+  }, []);
 
   useEffect(() => {
     const fetchCertificates = async () => {
@@ -242,6 +303,9 @@ const DashboardOverview = () => {
     calculateTotalRevenue();
   }, []);
 
+
+
+
   // Calculate the total pages
   const totalPages = Math.ceil(enrollments.length / itemsPerPage);
 
@@ -331,11 +395,25 @@ const DashboardOverview = () => {
   };
 
   // Placeholder data for BarChart
-  const chartData = [
-    { name: 'Jan', value: 100 },
-    { name: 'Feb', value: 200 },
-    { name: 'Mar', value: 150 },
+  const totalProgressUsers =
+  completionStats.completed +
+  completionStats.inProgress +
+  completionStats.notStarted;
+
+  const maxUsers = totalProgressUsers > 0 ? totalProgressUsers : 1;
+
+  const completedData = [
+    { name: 'Completed', value: completionStats.completed },
   ];
+
+  const inProgressData = [
+    { name: 'In Progress', value: completionStats.inProgress },
+  ];
+
+  const notStartedData = [
+    { name: 'Not Started', value: completionStats.notStarted },
+  ];
+
 
   return (
     <div className="p-5 space-y-5">
@@ -415,29 +493,44 @@ const DashboardOverview = () => {
         </div>
       </div>
 
-      {/* Row 3 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Row 3 - horizontal progress cards */}
+      <div className="flex flex-col md:flex-row gap-6">
         {/* Completed */}
         <div
-          className="bg-white p-6 rounded-xl"
+          className="flex-1 bg-white p-6 rounded-xl"
           style={{
-            boxShadow: '0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)',
+            boxShadow:
+              '0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)',
             borderRadius: 15,
           }}
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <Image src={healthy} width={25} height={25} alt="Healthy icon" />
-              <h3 className="text-gray-700 font-medium" style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>
+              <h3
+                className="text-gray-700 font-medium"
+                style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}
+              >
                 COMPLETED:
               </h3>
             </div>
-            <span className="text-2xl font-bold" style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>486</span>
+            <span
+              className="text-2xl font-bold"
+              style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}
+            >
+              {completionStats.completed}
+            </span>
           </div>
-          <div className="h-32">
+          <div className="h-10">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} >
-                <Bar dataKey="value" fill="#53B458" />
+              <BarChart
+                data={completedData}
+                layout="vertical"
+                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+              >
+                <XAxis type="number" domain={[0, maxUsers]} hide />
+                <YAxis type="category" dataKey="name" hide />
+                <Bar dataKey="value" fill="#53B458" radius={[0, 8, 8, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -445,25 +538,40 @@ const DashboardOverview = () => {
 
         {/* In Progress */}
         <div
-          className="bg-white p-6 rounded-xl"
+          className="flex-1 bg-white p-6 rounded-xl"
           style={{
-            boxShadow: '0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)',
+            boxShadow:
+              '0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)',
             borderRadius: 15,
           }}
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <Image src={processingTime} width={25} height={25} alt="Processing time icon" />
-              <h3 className="text-gray-700 font-medium" style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>
+              <h3
+                className="text-gray-700 font-medium"
+                style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}
+              >
                 IN PROGRESS:
               </h3>
             </div>
-            <span className="text-2xl font-bold" style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>284</span>
+            <span
+              className="text-2xl font-bold"
+              style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}
+            >
+              {completionStats.inProgress}
+            </span>
           </div>
-          <div className="h-32">
+          <div className="h-10">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
-                <Bar dataKey="value" fill="#FFDF50" />
+              <BarChart
+                data={inProgressData}
+                layout="vertical"
+                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+              >
+                <XAxis type="number" domain={[0, maxUsers]} hide />
+                <YAxis type="category" dataKey="name" hide />
+                <Bar dataKey="value" fill="#FFDF50" radius={[0, 8, 8, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -471,30 +579,46 @@ const DashboardOverview = () => {
 
         {/* Not Started */}
         <div
-          className="bg-white p-6 rounded-xl"
+          className="flex-1 bg-white p-6 rounded-xl"
           style={{
-            boxShadow: '0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)',
+            boxShadow:
+              '0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)',
             borderRadius: 15,
           }}
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <Image src={survey} width={35} height={35} alt="Survey icon" />
-              <h3 className="text-gray-700 font-medium" style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>
+              <h3
+                className="text-gray-700 font-medium"
+                style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}
+              >
                 NOT STARTED:
               </h3>
             </div>
-            <span className="text-2xl font-bold" style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>168</span>
+            <span
+              className="text-2xl font-bold"
+              style={{ color: '#2c3e50', fontSize: 16, fontWeight: 700 }}
+            >
+              {completionStats.notStarted}
+            </span>
           </div>
-          <div className="h-32">
+          <div className="h-10">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
-                <Bar dataKey="value" fill="#FB4455" />
+              <BarChart
+                data={notStartedData}
+                layout="vertical"
+                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+              >
+                <XAxis type="number" domain={[0, maxUsers]} hide />
+                <YAxis type="category" dataKey="name" hide />
+                <Bar dataKey="value" fill="#FB4455" radius={[0, 8, 8, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
       </div>
+
 
       {/* Row 4 */}
       <div
