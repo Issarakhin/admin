@@ -38,6 +38,7 @@ interface FirebaseError {
 
 interface Module {
   title: string;
+  slidePdfUrl?: string;
   lessons: {
     title: string;
     videoUrl: string;
@@ -238,6 +239,9 @@ const QuizFormModal: React.FC<QuizFormModalProps> = ({
 
 /* ---------- MAIN COMPONENT ---------- */
 const UploadCourseForm: React.FC = () => {
+  const DEFAULT_ALERT_MESSAGE =
+    'Please fill in all required fields, ensure a valid price is entered, or check for errors. Ensure categories are available in the admin panel.';
+
   const [isLoading, setIsLoading] = useState(false);
   const [profileImgFile, setProfileImgFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
@@ -272,6 +276,7 @@ const UploadCourseForm: React.FC = () => {
   const [isFree, setIsFree] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(DEFAULT_ALERT_MESSAGE);
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const [isFinalExamModalOpen, setIsFinalExamModalOpen] = useState(false);
   const [currentModuleKey, setCurrentModuleKey] = useState<string | null>(null);
@@ -285,6 +290,14 @@ const UploadCourseForm: React.FC = () => {
     }));
   };
 
+  const openAlert = (message: string = DEFAULT_ALERT_MESSAGE) => {
+    setAlertMessage(message);
+    setIsAlertModalOpen(true);
+  };
+
+  const isValidHttpsPdfUrl = (url: string) =>
+    /^https:\/\/.+\.pdf(?:[?#].*)?$/i.test(url.trim());
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -297,7 +310,7 @@ const UploadCourseForm: React.FC = () => {
       } catch (error: unknown) {
         const firebaseError = error as FirebaseError;
         console.error('Error fetching categories:', firebaseError.message);
-        setIsAlertModalOpen(true);
+        openAlert('Unable to load categories. Please try again.');
       }
     };
     fetchCategories();
@@ -484,6 +497,7 @@ const UploadCourseForm: React.FC = () => {
         ...prevState.modules,
         [moduleKey]: {
           title: '',
+          slidePdfUrl: '',
           lessons: [],
           quiz: {
             questions: Array(5).fill(null).map(() => ({
@@ -606,17 +620,28 @@ const UploadCourseForm: React.FC = () => {
     );
 
     if (isEmpty) {
-      setIsAlertModalOpen(true);
+      openAlert();
       return;
     }
 
     if (categories.length === 0) {
-      setIsAlertModalOpen(true);
+      openAlert('No categories available. Please add categories in the admin panel.');
       return;
     }
 
     if (!isFree && (isNaN(Number(courseData.price)) || Number(courseData.price) <= 0)) {
-      setIsAlertModalOpen(true);
+      openAlert('Please enter a valid paid price greater than 0.');
+      return;
+    }
+
+    const invalidModuleSlide = Object.entries(courseData.modules).find(([, module]) => {
+      const slideUrl = module.slidePdfUrl?.trim();
+      return Boolean(slideUrl) && !isValidHttpsPdfUrl(slideUrl || '');
+    });
+
+    if (invalidModuleSlide) {
+      const moduleLabel = invalidModuleSlide[0].replace(/^module/i, '') || invalidModuleSlide[0];
+      openAlert(`Module ${moduleLabel} slide URL must be a valid HTTPS .pdf link.`);
       return;
     }
 
@@ -693,7 +718,7 @@ const UploadCourseForm: React.FC = () => {
     } catch (error: unknown) {
       const firebaseError = error as FirebaseError;
       console.error('Error uploading course:', firebaseError.message);
-      setIsAlertModalOpen(true);
+      openAlert('Failed to upload course. Please check your inputs and try again.');
     } finally {
       setIsLoading(false);
     }
@@ -1269,6 +1294,40 @@ const UploadCourseForm: React.FC = () => {
                           />
                         </div>
 
+                        <div className="space-y-2">
+                          <Label style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                            Module Slide PDF URL:
+                          </Label>
+                          <Input
+                            value={module.slidePdfUrl || ''}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                              setCourseData((prevState) => ({
+                                ...prevState,
+                                modules: {
+                                  ...prevState.modules,
+                                  [moduleKey]: {
+                                    ...prevState.modules[moduleKey],
+                                    slidePdfUrl: e.target.value,
+                                  },
+                                },
+                              }))
+                            }
+                            className="w-full"
+                            placeholder="https://...module-slide.pdf"
+                            style={{ borderRadius: 15, backgroundColor: "#fff", color: "#2c3e50", fontWeight: 400, fontSize: 15 }}
+                          />
+                          {module.slidePdfUrl && (
+                            <a
+                              href={module.slidePdfUrl}
+                              target="_blank"
+                              rel="noreferrer noopener"
+                              style={{ color: '#2c3e50', fontSize: 14, textDecoration: 'underline' }}
+                            >
+                              Open current module slide
+                            </a>
+                          )}
+                        </div>
+
                         <Button
                           type="button"
                           size="sm"
@@ -1534,7 +1593,7 @@ const UploadCourseForm: React.FC = () => {
         <div className="text-center">
           <Lottie animationData={failureAnimation} loop style={{ width: 150, height: 150, margin: '0 auto' }} />
           <h2 className=" mt-4" style={{ fontWeight: 800, fontSize: 16, color: "#2c3e50" }}>Upload Failed!</h2>
-          <p style={{ fontWeight: 400, fontSize: 14, color: "#6e737c" }}>Please fill in all required fields, ensure a valid price is entered, or check for errors. Ensure categories are available in the admin panel.</p>
+          <p style={{ fontWeight: 400, fontSize: 14, color: "#6e737c" }}>{alertMessage}</p>
           <div className="mt-4">
             <Button onClick={() => setIsAlertModalOpen(false)} className="w-full bg-red-600 text-white" style={{ paddingTop: 10, paddingBottom: 10, paddingLeft: 20, paddingRight: 20, borderRadius: 15, fontSize: 15, fontWeight: 400 }}>
               Okay

@@ -35,7 +35,14 @@ interface Question {
 
 interface Module {
   title: string;
-  lessons: { title: string; videoUrl: string; description: string }[];
+  slidePdfUrl?: string;
+  lessons: {
+    title: string;
+    videoUrl: string;
+    pdfUrl?: string;
+    description: string;
+    contentType?: 'video' | 'pdf';
+  }[];
   quiz: { questions: Question[] };
   isExpanded: boolean;
 }
@@ -273,6 +280,9 @@ const CourseList: React.FC = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 5;
+
+  const isValidHttpsPdfUrl = (url: string) =>
+    /^https:\/\/.+\.pdf(?:[?#].*)?$/i.test(url.trim());
 
   /* ---------- pagination helpers ---------- */
   const indexOfLast = currentPage * coursesPerPage;
@@ -594,6 +604,20 @@ const CourseList: React.FC = () => {
     } as CourseData));
   };
 
+  const handleModuleSlideChange = (moduleKey: string, value: string) => {
+    if (!editCourseData) return;
+    setEditCourseData((prevState) => ({
+      ...prevState,
+      modules: {
+        ...prevState?.modules,
+        [moduleKey]: {
+          ...prevState?.modules[moduleKey],
+          slidePdfUrl: value,
+        },
+      },
+    } as CourseData));
+  };
+
   const handleLessonChange = (
     moduleKey: string,
     lessonIndex: number,
@@ -633,6 +657,7 @@ const CourseList: React.FC = () => {
         ...prevState?.modules,
         [moduleKey]: {
           title: '',
+          slidePdfUrl: '',
           lessons: [],
           quiz: {
             questions: Array(5).fill(null).map(() => ({
@@ -759,6 +784,18 @@ const CourseList: React.FC = () => {
 
     if (!isFree && (isNaN(Number(editCourseData.price)) || Number(editCourseData.price) <= 0)) {
       setErrorMessage('Please enter a valid price.');
+      setIsErrorModalOpen(true);
+      return;
+    }
+
+    const invalidModuleSlide = Object.entries(editCourseData.modules || {}).find(([, module]) => {
+      const slideUrl = module.slidePdfUrl?.trim();
+      return Boolean(slideUrl) && !isValidHttpsPdfUrl(slideUrl || '');
+    });
+
+    if (invalidModuleSlide) {
+      const moduleLabel = invalidModuleSlide[0].replace(/^module/i, '') || invalidModuleSlide[0];
+      setErrorMessage(`Module ${moduleLabel} slide URL must be a valid HTTPS .pdf link.`);
       setIsErrorModalOpen(true);
       return;
     }
@@ -1703,6 +1740,31 @@ const CourseList: React.FC = () => {
                                     placeholder="Type module title"
                                     style={{ borderRadius: 15, backgroundColor: "#fff", color: "#2c3e50", fontWeight: 400, fontSize: 15 }}
                                   />
+                                </div>
+
+                                <div className="space-y-2">
+                                  <Label style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                                    Module Slide PDF URL:
+                                  </Label>
+                                  <Input
+                                    value={module.slidePdfUrl || ''}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                      handleModuleSlideChange(moduleKey, e.target.value)
+                                    }
+                                    className="w-full"
+                                    placeholder="https://...module-slide.pdf"
+                                    style={{ borderRadius: 15, backgroundColor: "#fff", color: "#2c3e50", fontWeight: 400, fontSize: 15 }}
+                                  />
+                                  {module.slidePdfUrl && (
+                                    <a
+                                      href={module.slidePdfUrl}
+                                      target="_blank"
+                                      rel="noreferrer noopener"
+                                      style={{ color: '#2c3e50', fontSize: 14, textDecoration: 'underline' }}
+                                    >
+                                      Open current module slide
+                                    </a>
+                                  )}
                                 </div>
 
                                 <Button
