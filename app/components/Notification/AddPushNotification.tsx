@@ -10,7 +10,7 @@ import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
 import { Label } from '@/app/components/ui/label';
 import { Textarea } from '@/app/components/ui/textarea';
-import { cn } from '@/app/lib/untils/utils';
+import { cn } from '@/app/lib/utils/utils';
 import successAnimation from '@/app/assets/animations/success.json';
 import errorAnimation from '@/app/assets/animations/failed.json';
 import dynamic from 'next/dynamic';

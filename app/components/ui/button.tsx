@@ -1,6 +1,6 @@
 // ../ui/button.tsx
 import * as React from 'react';
-import { cn } from '@/app/lib/untils/utils'; // Utility for className concatenation, if using Shadcn
+import { cn } from '@/app/lib/utils/utils'; // Utility for className concatenation, if using Shadcn
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'default' | 'lg';
