@@ -2,119 +2,136 @@
 
 import React, { useState } from "react";
 import {
-    BookOpen, Calendar, Users, Settings, Bell,
-    ChevronLeft, ChevronRight, ChevronDown, ChevronUp
+  Bell,
+  BookOpen,
+  Calendar,
+  ChevronDown,
+  DollarSign,
+  FileText,
+  HelpCircle,
+  LayoutDashboard,
+  Megaphone,
+  Pen,
+  UserRound,
+  Users,
 } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
+import DGLOGO from "@/app/assets/png/LOGO-DG-Next-havebackground.png";
 
-const sidebarItems = [
-    {
-        id: "courses",
-        icon: BookOpen,
-        label: "Courses",
-        subItems: [
-            { id: "add-course", label: "Add Course" },
-            { id: "categories", label: "Categories" },
-            { id: "payment", label: "Payment" },
-        ],
-    },
-    {
-        id: "students",
-        icon: Users,
-        label: "Students",
-        subItems: [
-            { id: "manage-student", label: "Manage Student" },
-            { id: "student-enroll-recorded", label: "Student Enroll Recorded" },
-        ],
-    },
-    {
-        id: "events",
-        icon: Calendar,
-        label: "Events",
-        subItems: [
-            { id: "display-event-insight", label: "Display Event Insight" },
-            { id: "add-event", label: "Add Event" },
-        ],
-    },
-    {
-        id: "notifications",
-        icon: Bell,
-        label: "Manage Notifications",
-        subItems: [
-            { id: "display-notification-insight", label: "Display Notification Insight" },
-            { id: "add-push-notification", label: "Add Push Notification" },
-        ],
-    },
-    {
-        id: "settings",
-        icon: Settings,
-        label: "Settings",
-        subItems: [{ id: "logout", label: "Logout" }],
-    },
+interface MenuItem {
+  id: string;
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  subItems?: { id: string; label: string }[];
+}
+
+interface SidebarProps {
+  activeSection: string;
+  setActiveSection: React.Dispatch<React.SetStateAction<string>>;
+  isCollapsed: boolean;
+}
+
+const submenuVariants = {
+  hidden: { opacity: 0, height: 0, overflow: "hidden" },
+  visible: { opacity: 1, height: "auto", transition: { duration: 0.3 } },
+};
+
+const menuItems: MenuItem[] = [
+  { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", subItems: [{ id: "overview", label: "Overview" }] },
+  { id: "courses", icon: BookOpen, label: "Courses", subItems: [{ id: "course-list", label: "Course List" }, { id: "add-course", label: "Upload Course" }, { id: "add-course-categories", label: "Upload Course Categories" }] },
+  { id: "trainers", icon: UserRound, label: "Trainers", subItems: [{ id: "list-trainers", label: "List Trainers" }, { id: "add-trainer", label: "Add Trainer" }] },
+  { id: "certificates", icon: FileText, label: "Certificates", subItems: [{ id: "list-certificates", label: "List Certificates" }] },
+  { id: "students", icon: Users, label: "Students", subItems: [{ id: "list-student", label: "List Students" }, { id: "student-enroll-recorded", label: "Enrollments" }] },
+  { id: "blogposts", icon: Pen, label: "Blog Posts", subItems: [{ id: "add-blogpost", label: "Upload Post" }, { id: "list-blogpost", label: "List Posts" }] },
+  { id: "events", icon: Calendar, label: "Events", subItems: [{ id: "list-events", label: "List Events" }, { id: "add-event", label: "Add Event" }] },
+  { id: "notifications", icon: Bell, label: "Notifications", subItems: [{ id: "list-notification", label: "List Notifications" }, { id: "add-push-notification", label: "Add Push Notification" }] },
+  { id: "marketing", icon: Megaphone, label: "Marketing", subItems: [{ id: "discounts", label: "Discounts" }] },
+  { id: "payment", icon: DollarSign, label: "Payments", subItems: [{ id: "course-sales", label: "Course Sales" }] },
+  { id: "support", icon: HelpCircle, label: "Support", subItems: [{ id: "support-tickets", label: "Tickets" }] },
 ];
 
-const Sidebar = ({ activeSection, setActiveSection }: { activeSection: string; setActiveSection: (section: string) => void }) => {
-    const [isCollapsed, setIsCollapsed] = useState(false);
-    const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
+const Sidebar = ({ activeSection, setActiveSection, isCollapsed }: SidebarProps) => {
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
+    dashboard: true,
+    courses: true,
+  });
+  const currentYear = new Date().getFullYear();
 
-    const toggleMenu = (id: string) => {
-        setOpenMenus((prev) => ({ ...prev, [id]: !prev[id] }));
-    };
+  const toggleExpand = (id: string) => {
+    setExpandedItems((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
-    return (
-        <div className={`shadow-lg transition-all duration-300 bg-white ${isCollapsed ? "w-25" : "w-64"} h-screen flex flex-col`}>
-            {/* Header with Toggle Button */}
-            <div className="flex items-center justify-between p-3 border-b">
-                
-                <button onClick={() => setIsCollapsed(!isCollapsed)} className="p-1 rounded-lg " style={{borderWidth:1, borderColor: "#b6b6b6"}}>
-                    {isCollapsed ? <ChevronRight size={30} color="#2c3e50"/> : <ChevronLeft size={30} color="#2c3e50"/>}
-                </button>
-                {!isCollapsed && (
-                    <h1 className="text-xl font-bold" style={{justifyContent: 'flex-center', color: "#2c3e50"}}>Menu</h1>
-                )}
-            </div>
+  return (
+    <aside className={`h-full bg-white dark:bg-gray-900 shadow-lg transition-all duration-300 ease-in-out ${isCollapsed ? "w-20" : "w-64"} flex flex-col`}>
+      <div className="flex items-center justify-between dark:border-gray-800 px-4 bg-[#2c3e50]" style={{ paddingTop: 8, paddingBottom: 8, borderBottomWidth: 1, borderColor: "#34495e" }}>
+        <Link href="/dashboard" passHref>
+          <div className={`flex items-center space-x-3 ${isCollapsed ? "justify-center w-full" : ""}`}>
+            <Image src={DGLOGO} width={40} height={40} alt="DGLOGO" style={{ borderRadius: 5 }} />
+            {!isCollapsed && <span className="text-[#2c3e50] dark:text-[#fff]" style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>Admin Dashboard</span>}
+          </div>
+        </Link>
+      </div>
 
-            {/* Sidebar Navigation */}
-            <nav className="flex-1 overflow-y-auto">
-                {sidebarItems.map((item) => (
-                    <div key={item.id}>
-                        <div
-                            className={`flex items-center justify-between p-3 cursor-pointer transition-all ${
-                                activeSection === item.id ? "#fff" : "hover:bg-gray-100"
-                            }`}
-                            onClick={() => toggleMenu(item.id)}
-                        >
-                            <div className="flex items-center">
-                                <item.icon size={20} />
-                                {!isCollapsed && <span className="ml-3">{item.label}</span>}
-                            </div>
-                            {!isCollapsed && (
-                                <button>
-                                    {openMenus[item.id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                                </button>
-                            )}
-                        </div>
+      <nav className="flex-1 py-0 overflow-y-auto" style={{ backgroundColor: "#2c3e50" }}>
+        {menuItems.map((item) => (
+          <div key={item.id} className="px-3">
+            <button
+              onClick={() => (item.subItems ? toggleExpand(item.id) : setActiveSection(item.id))}
+              style={{ fontSize: 14, fontWeight: 600, borderRadius: 15, color: "#fff" }}
+              className={`w-full flex items-center justify-between px-4 py-2 my-1 transition-all duration-200 ${
+                activeSection.startsWith(item.id.split("-")[0]) ? "bg-[#F87E38] shadow-lg" : "text-[#2c3e50] dark:text-gray-400 hover:bg-[#F87E38] dark:hover:bg-gray-800"
+              } ${isCollapsed ? "justify-center" : ""}`}
+            >
+              <div className="flex items-center space-x-3">
+                <item.icon className="w-5 h-5" />
+                {!isCollapsed && <span>{item.label}</span>}
+              </div>
+              {!isCollapsed && item.subItems && (
+                <ChevronDown className={`w-5 h-5 transition-transform ${expandedItems[item.id] ? "rotate-180" : ""}`} />
+              )}
+            </button>
+            <AnimatePresence>
+              {!isCollapsed && expandedItems[item.id] && (
+                <motion.div
+                  variants={submenuVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  className="pl-8 py-1 space-y-1"
+                >
+                  {item.subItems?.map((subItem) => (
+                    <button
+                      key={subItem.id}
+                      onClick={() => setActiveSection(subItem.id)}
+                      style={{ fontSize: 12, fontWeight: 400, color: "#bdbddb" }}
+                      className={`w-full text-left px-4 py-2 text-sm rounded-md transition-all duration-200 relative ${
+                        activeSection === subItem.id ? "text-[#F87E38]" : "text-[gray-500] dark:text-gray-400 hover:text-[#F87E38] dark:hover:text-[#F87E38]"
+                      }`}
+                    >
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-1 bg-[#F87E38] rounded-r-full opacity-0 transition-opacity" style={{ opacity: activeSection === subItem.id ? 1 : 0 }} />
+                      {subItem.label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        ))}
+      </nav>
 
-                        {/* Sub-items (Expandable) */}
-                        {!isCollapsed && openMenus[item.id] && (
-                            <div className="ml-6">
-                                {item.subItems.map((subItem) => (
-                                    <div
-                                        key={subItem.id}
-                                        className={`p-2 cursor-pointer transition-all ${
-                                            activeSection === subItem.id ? "bg-white" : "hover:bg-gray-100"
-                                        }`}
-                                        onClick={() => setActiveSection(subItem.id)}
-                                    >
-                                        {subItem.label}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </nav>
+      {!isCollapsed && (
+        <div className="px-4 py-4 bg-[#2c3e50] border-t border-[#34495e]">
+          <div className="text-center space-y-1">
+            <p className="text-xs text-gray-300" style={{ fontWeight: 400, fontSize: 12 }}>Terms & Conditions</p>
+            <p className="text-xs text-gray-300" style={{ fontWeight: 400, fontSize: 12 }}>Version 1.0.0</p>
+            <p className="text-xs text-gray-300" style={{ fontWeight: 400, fontSize: 12 }}>© {currentYear} All Rights Reserved by DGNext</p>
+          </div>
         </div>
-    );
+      )}
+    </aside>
+  );
 };
 
 export default Sidebar;
