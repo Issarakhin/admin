@@ -348,7 +348,7 @@ const Header = ({ toggleSidebar, isCollapsed, onSignOut }: { toggleSidebar: () =
     try {
       setIsLoading(true);
       await onSignOut();
-      router.push("/");
+      router.push("/login");
     } catch (error) {
       console.error("Error signing out:", error);
     } finally {
@@ -458,7 +458,7 @@ const Sidebar = ({ activeSection, setActiveSection, isCollapsed }: { activeSecti
   return (
     <aside className={`h-full bg-white dark:bg-gray-900 shadow-lg transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'w-64'} flex flex-col`}>
       <div className="flex items-center justify-between dark:border-gray-800 px-4 bg-[#2c3e50] " style={{ paddingTop: 8, paddingBottom: 8, borderBottomWidth: 1, borderColor: "#34495e" }}>
-        <Link href="/" passHref>
+        <Link href="/dashboard" passHref>
           <div className={`flex items-center space-x-3 ${isCollapsed ? 'justify-center w-full' : ''}`}>
             <Image src={DGLOGO} width={40} height={40} alt="DGLOGO" style={{ borderRadius: 5 }} />
             {!isCollapsed && <span className=" text-[#2c3e50] dark:text-[#fff]" style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>Admin Dashboard</span>}

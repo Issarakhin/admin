@@ -1,5 +1,5 @@
-import AuthPreview from "./components/Authentication/Authentication";
+import { redirect } from "next/navigation";
 
-export default function AdminPage() {
-  return <AuthPreview />;
+export default function HomePage() {
+  redirect("/login");
 }

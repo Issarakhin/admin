@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
   onAuthStateChanged,
   User,
 } from "firebase/auth";
@@ -12,7 +11,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/app/components/ui/ca
 import { Button } from "@/app/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/app/components/ui/tabs";
 import { Checkbox } from "@/app/components/ui/checkbox";
-import AdminDashboard from "@/app/components/Dashboard/AdminDashboard";
 import Modal from "@/app/components/ui/Modals";
 import loadingAnimation from "@/app/assets/animations/sand-loading.json";
 import failedAnimation from "@/app/assets/animations/failed.json";
@@ -21,6 +19,7 @@ import { Eye, EyeOff, Check, X } from "lucide-react";
 import DG from "@/app/assets/animations/login-1.json";
 import BGAnimation from "@/app/assets/animations/bg-style3.json";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
@@ -201,6 +200,7 @@ const PasswordStrengthIndicator = ({ password }: { password: string }) => {
 };
 
 export default function AuthPreview() {
+  const router = useRouter();
   const [modalConfig, setModalConfig] = useState<ModalConfig>({
     show: false,
     message: "",
@@ -219,7 +219,6 @@ export default function AuthPreview() {
   const [rememberMe, setRememberMe] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [showDashboard, setShowDashboard] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
@@ -227,7 +226,6 @@ export default function AuthPreview() {
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
-        setShowDashboard(false);
         setModalConfig({ show: false, message: "", type: "loading" });
       }
     });
@@ -346,14 +344,10 @@ export default function AuthPreview() {
   // Handle modal close for success and error cases
   const handleModalClose = () => {
     if (modalConfig.type === "success" && isAuthenticated) {
-      setShowDashboard(true);
+      router.push("/dashboard");
     }
     setModalConfig({ show: false, message: "", type: "loading" });
   };
-
-  if (showDashboard && isAuthenticated) {
-    return <AdminDashboard onSignOut={() => signOut(auth)} />;
-  }
 
   return (
     <>
