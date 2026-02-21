@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { messaging } from '@/app/lib/utils/firebaseAdmin';
+import { getMessaging } from '@/app/lib/utils/firebaseAdmin';
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,6 +12,8 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    const messaging = getMessaging();
 
     await messaging.send({
       token,

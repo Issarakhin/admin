@@ -1,19 +1,33 @@
-// src/lib/utils/firebaseAdmin.ts
-import admin from 'firebase-admin';
+import admin from "firebase-admin";
 
-const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+const initializeAdmin = () => {
+  if (admin.apps.length) {
+    return admin.app();
+  }
 
-if (!serviceAccountKey) {
-  throw new Error("Missing FIREBASE_SERVICE_ACCOUNT_KEY in environment variables");
-}
+  const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+  if (!serviceAccountKey) {
+    throw new Error("Missing FIREBASE_SERVICE_ACCOUNT_KEY in environment variables");
+  }
 
-const serviceAccount = JSON.parse(serviceAccountKey);
+  let serviceAccount: admin.ServiceAccount;
+  try {
+    serviceAccount = JSON.parse(serviceAccountKey) as admin.ServiceAccount;
+  } catch {
+    throw new Error("Invalid FIREBASE_SERVICE_ACCOUNT_KEY JSON format");
+  }
 
-if (!admin.apps.length) {
-  admin.initializeApp({
+  return admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
-}
+};
 
-export const firestore = admin.firestore();
-export const messaging = admin.messaging();
+export const getFirestore = () => {
+  initializeAdmin();
+  return admin.firestore();
+};
+
+export const getMessaging = () => {
+  initializeAdmin();
+  return admin.messaging();
+};

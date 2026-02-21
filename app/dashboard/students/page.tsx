@@ -1,9 +1,5 @@
-import SectionCard from "../_components/SectionCard";
+import { redirect } from "next/navigation";
 
 export default function StudentsPage() {
-  return (
-    <SectionCard>
-      <h2 className="text-xl font-bold">Student Management</h2>
-    </SectionCard>
-  );
+  redirect("/dashboard/list-student");
 }
