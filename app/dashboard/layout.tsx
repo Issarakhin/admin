@@ -7,10 +7,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { auth } from "@/app/lib/config/firebase";
 import Sidebar from "@/app/components/Sidebar/Sidebar";
 import AdminHeader from "@/app/components/Header/AdminHeader";
-import {
-  getDashboardPageTitle,
-  isDashboardSection,
-} from "@/app/components/Dashboard/dashboardSections";
 
 export default function DashboardLayout({
   children,
@@ -38,9 +34,13 @@ export default function DashboardLayout({
   }, [router]);
 
   const currentSection = useMemo(() => {
-    const section = pathname.split("/")[2] ?? "overview";
-    return isDashboardSection(section) ? section : "overview";
+    return pathname.split("/")[2] ?? "overview";
   }, [pathname]);
+  const pageTitle = useMemo(() => {
+    return currentSection
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (l) => l.toUpperCase());
+  }, [currentSection]);
 
   if (!isReady || !isAuthenticated) {
     return null;
@@ -66,7 +66,7 @@ export default function DashboardLayout({
           <div className="container mx-auto">
             <div className="mb-8">
               <h1 style={{ fontSize: 25, fontWeight: 800, color: "#2c3e50" }}>
-                {getDashboardPageTitle(currentSection)}
+                {pageTitle}
               </h1>
               <p
                 style={{ fontSize: 16, fontWeight: 400, color: "#bdbdbd" }}
