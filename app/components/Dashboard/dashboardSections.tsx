@@ -22,7 +22,7 @@ const SectionWrapper = ({ children }: { children: React.ReactNode }) => (
 
 type SectionRenderer = () => React.ReactNode;
 
-const sectionRenderers: Record<string, SectionRenderer> = {
+const sectionRenderers = {
   overview: () => (
     <SectionWrapper>
       <DashboardOverview />
@@ -51,6 +51,11 @@ const sectionRenderers: Record<string, SectionRenderer> = {
   "list-trainers": () => (
     <SectionWrapper>
       <ListTrainer />
+    </SectionWrapper>
+  ),
+  "list-certificates": () => (
+    <SectionWrapper>
+      <h2 className="text-xl font-bold">Certificates</h2>
     </SectionWrapper>
   ),
   students: () => (
@@ -108,15 +113,39 @@ const sectionRenderers: Record<string, SectionRenderer> = {
       <ListNotification />
     </SectionWrapper>
   ),
+  discounts: () => (
+    <SectionWrapper>
+      <h2 className="text-xl font-bold">Discounts</h2>
+    </SectionWrapper>
+  ),
+  "course-sales": () => (
+    <SectionWrapper>
+      <h2 className="text-xl font-bold">Course Sales</h2>
+    </SectionWrapper>
+  ),
+  "support-tickets": () => (
+    <SectionWrapper>
+      <h2 className="text-xl font-bold">Support Tickets</h2>
+    </SectionWrapper>
+  ),
   settings: () => (
     <SectionWrapper>
       <h2 className="text-xl font-bold">Settings</h2>
     </SectionWrapper>
   ),
+} satisfies Record<string, SectionRenderer>;
+
+export type DashboardSection = keyof typeof sectionRenderers;
+export const dashboardSections = Object.keys(sectionRenderers) as DashboardSection[];
+
+export const isDashboardSection = (section: string): section is DashboardSection => {
+  return section in sectionRenderers;
 };
 
 export const renderDashboardSection = (section: string) => {
-  const renderer = sectionRenderers[section] ?? sectionRenderers.overview;
+  const renderer = isDashboardSection(section)
+    ? sectionRenderers[section]
+    : sectionRenderers.overview;
   return renderer();
 };
 

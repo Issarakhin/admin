@@ -28,8 +28,7 @@ interface MenuItem {
 }
 
 interface SidebarProps {
-  activeSection: string;
-  setActiveSection: React.Dispatch<React.SetStateAction<string>>;
+  currentSection: string;
   isCollapsed: boolean;
 }
 
@@ -52,7 +51,7 @@ const menuItems: MenuItem[] = [
   { id: "support", icon: HelpCircle, label: "Support", subItems: [{ id: "support-tickets", label: "Tickets" }] },
 ];
 
-const Sidebar = ({ activeSection, setActiveSection, isCollapsed }: SidebarProps) => {
+const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
     dashboard: true,
     courses: true,
@@ -66,7 +65,7 @@ const Sidebar = ({ activeSection, setActiveSection, isCollapsed }: SidebarProps)
   return (
     <aside className={`h-full bg-white dark:bg-gray-900 shadow-lg transition-all duration-300 ease-in-out ${isCollapsed ? "w-20" : "w-64"} flex flex-col`}>
       <div className="flex items-center justify-between dark:border-gray-800 px-4 bg-[#2c3e50]" style={{ paddingTop: 8, paddingBottom: 8, borderBottomWidth: 1, borderColor: "#34495e" }}>
-        <Link href="/dashboard" passHref>
+        <Link href="/dashboard/overview" passHref>
           <div className={`flex items-center space-x-3 ${isCollapsed ? "justify-center w-full" : ""}`}>
             <Image src={DGLOGO} width={40} height={40} alt="DGLOGO" style={{ borderRadius: 5 }} />
             {!isCollapsed && <span className="text-[#2c3e50] dark:text-[#fff]" style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>Admin Dashboard</span>}
@@ -75,13 +74,18 @@ const Sidebar = ({ activeSection, setActiveSection, isCollapsed }: SidebarProps)
       </div>
 
       <nav className="flex-1 py-0 overflow-y-auto" style={{ backgroundColor: "#2c3e50" }}>
-        {menuItems.map((item) => (
+        {menuItems.map((item) => {
+          const hasActiveSubItem =
+            item.subItems?.some((subItem) => subItem.id === currentSection) ??
+            false;
+
+          return (
           <div key={item.id} className="px-3">
             <button
-              onClick={() => (item.subItems ? toggleExpand(item.id) : setActiveSection(item.id))}
+              onClick={() => item.subItems && toggleExpand(item.id)}
               style={{ fontSize: 14, fontWeight: 600, borderRadius: 15, color: "#fff" }}
               className={`w-full flex items-center justify-between px-4 py-2 my-1 transition-all duration-200 ${
-                activeSection.startsWith(item.id.split("-")[0]) ? "bg-[#F87E38] shadow-lg" : "text-[#2c3e50] dark:text-gray-400 hover:bg-[#F87E38] dark:hover:bg-gray-800"
+                hasActiveSubItem ? "bg-[#F87E38] shadow-lg" : "text-[#2c3e50] dark:text-gray-400 hover:bg-[#F87E38] dark:hover:bg-gray-800"
               } ${isCollapsed ? "justify-center" : ""}`}
             >
               <div className="flex items-center space-x-3">
@@ -102,23 +106,24 @@ const Sidebar = ({ activeSection, setActiveSection, isCollapsed }: SidebarProps)
                   className="pl-8 py-1 space-y-1"
                 >
                   {item.subItems?.map((subItem) => (
-                    <button
+                    <Link
                       key={subItem.id}
-                      onClick={() => setActiveSection(subItem.id)}
+                      href={`/dashboard/${subItem.id}`}
                       style={{ fontSize: 12, fontWeight: 400, color: "#bdbddb" }}
                       className={`w-full text-left px-4 py-2 text-sm rounded-md transition-all duration-200 relative ${
-                        activeSection === subItem.id ? "text-[#F87E38]" : "text-[gray-500] dark:text-gray-400 hover:text-[#F87E38] dark:hover:text-[#F87E38]"
+                        currentSection === subItem.id ? "text-[#F87E38]" : "text-[gray-500] dark:text-gray-400 hover:text-[#F87E38] dark:hover:text-[#F87E38]"
                       }`}
                     >
-                      <span className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-1 bg-[#F87E38] rounded-r-full opacity-0 transition-opacity" style={{ opacity: activeSection === subItem.id ? 1 : 0 }} />
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-1 bg-[#F87E38] rounded-r-full opacity-0 transition-opacity" style={{ opacity: currentSection === subItem.id ? 1 : 0 }} />
                       {subItem.label}
-                    </button>
+                    </Link>
                   ))}
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
-        ))}
+          );
+        })}
       </nav>
 
       {!isCollapsed && (
