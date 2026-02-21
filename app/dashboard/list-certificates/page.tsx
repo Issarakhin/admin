@@ -1,4 +1,4 @@
-import SectionCard from "@/app/components/Dashboard/SectionCard";
+import SectionCard from "@/app/components/SectionCard";
 
 const certificates = [
   { id: "CERT-0001", student: "Pending", course: "Pending", issuedAt: "-", status: "Draft" },

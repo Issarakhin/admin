@@ -1,4 +1,4 @@
-import SectionCard from "@/app/components/Dashboard/SectionCard";
+import SectionCard from "@/app/components/SectionCard";
 
 const tickets = [
   { id: "TCK-001", user: "Pending", subject: "Pending", priority: "Normal", status: "Open" },

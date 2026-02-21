@@ -1,4 +1,4 @@
-import SectionCard from "@/app/components/Dashboard/SectionCard";
+import SectionCard from "@/app/components/SectionCard";
 
 const sales = [
   { orderId: "ORD-1001", course: "Pending", buyer: "Pending", amount: "$0.00", date: "-" },

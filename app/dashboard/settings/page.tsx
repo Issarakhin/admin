@@ -1,4 +1,4 @@
-import SectionCard from "@/app/components/Dashboard/SectionCard";
+import SectionCard from "@/app/components/SectionCard";
 
 export default function SettingsPage() {
   return (

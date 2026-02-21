@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { AdminData } from "./types";
+import { AdminData } from "./dashboard-types";
 
 interface ProfileAdminModalProps {
   isOpen: boolean;

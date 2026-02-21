@@ -1,4 +1,4 @@
-import SectionCard from "@/app/components/Dashboard/SectionCard";
+import SectionCard from "@/app/components/SectionCard";
 
 const campaigns = [
   { code: "WELCOME10", discount: "10%", scope: "All courses", status: "Inactive" },
