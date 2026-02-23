@@ -70,7 +70,7 @@ export default function AuthPreview() {
       return;
     }
 
-    if (loginData.password !== expectedPassword) {
+    if (loginData.password.trim() !== expectedPassword.trim()) {
       setModalConfig({
         show: true,
         message: "Incorrect password. Please try again.",
@@ -86,7 +86,7 @@ export default function AuthPreview() {
       setModalConfig({ show: true, message: "You have logged in successfully!", type: "success" });
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Login failed. Please try again!";
-      setModalConfig({ show: true, message: `Login failed<br/> ${errorMessage}`, type: "error" });
+      setModalConfig({ show: true, message: errorMessage, type: "error" });
     }
   };
 
@@ -214,7 +214,7 @@ export default function AuthPreview() {
                     className="text-lg font-semibold mb-3"
                     style={{ fontSize: 16, fontWeight: 800, color: "#e74c3c" }}
                   >
-                    Login Failed! <br /> <span style={{ fontSize: 14, fontWeight: 400, color: "#6e737c" }}>Incorrect password <br /> Please try again.</span>
+                    Login Failed! <br /> <span style={{ fontSize: 14, fontWeight: 400, color: "#6e737c" }}>{modalConfig.message || "Please try again."}</span>
                   </h2>
                   <Button
                     className="mt-4 bg-[#2c3e50] hover:bg-[#1c2b3a] text-white"
