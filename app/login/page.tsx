@@ -1,8 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { onAuthStateChanged, signInAnonymously, User } from "firebase/auth";
-import { auth } from "@/app/lib/config/firebase";
+import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import Modal from "@/app/components/ui/Modals";
@@ -38,18 +36,6 @@ export default function AuthPreview() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showLoginPassword, setShowLoginPassword] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
-      if (user) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-        setModalConfig({ show: false, message: "", type: "loading" });
-      }
-    });
-    return () => unsubscribe();
-  }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLoginData((prev) => ({ ...prev, [name]: value }));
@@ -59,30 +45,25 @@ export default function AuthPreview() {
     e.preventDefault();
     setModalConfig({ show: true, message: "Please Wait", type: "loading" });
 
-    const expectedPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
-
-    if (!expectedPassword) {
-      setModalConfig({
-        show: true,
-        message: "Missing NEXT_PUBLIC_ADMIN_PASSWORD in environment",
-        type: "error",
-      });
-      return;
-    }
-
-    if (loginData.password.trim() !== expectedPassword.trim()) {
-      setModalConfig({
-        show: true,
-        message: "Incorrect password. Please try again.",
-        type: "error",
-      });
-      return;
-    }
-
     try {
-      if (!auth.currentUser) {
-        await signInAnonymously(auth);
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: loginData.password }),
+      });
+
+      const data = (await response.json()) as { success?: boolean; message?: string };
+
+      if (!response.ok || !data.success) {
+        setModalConfig({
+          show: true,
+          message: data.message || "Login failed. Please try again.",
+          type: "error",
+        });
+        return;
       }
+
+      setIsAuthenticated(true);
       setModalConfig({ show: true, message: "You have logged in successfully!", type: "success" });
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Login failed. Please try again!";
@@ -92,7 +73,7 @@ export default function AuthPreview() {
 
   const handleModalClose = () => {
     if (modalConfig.type === "success" && isAuthenticated) {
-      router.push("/dashboard");
+      router.push("/dashboard/overview");
     }
     setModalConfig({ show: false, message: "", type: "loading" });
   };

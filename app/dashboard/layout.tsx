@@ -2,7 +2,6 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { onAuthStateChanged, signOut, User as FirebaseUser } from "firebase/auth";
 import {
   Bell,
   BookOpen,
@@ -27,7 +26,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { doc, getDoc, updateDoc, DocumentData } from "@firebase/firestore";
-import { auth, db } from "@/app/lib/config/firebase";
+import { db } from "@/app/lib/config/firebase";
 import DGLOGO from "@/app/assets/png/LOGO-DG-Next-havebackground.png";
 import SignOutModal from "@/app/components/ui/signoutmodal";
 import {
@@ -56,8 +55,10 @@ interface SidebarProps {
 interface AdminHeaderProps {
   toggleSidebar: () => void;
   isCollapsed: boolean;
-  onSignOut: () => void;
+  onSignOut: () => Promise<void>;
 }
+
+const ADMIN_PROFILE_DOC_ID = process.env.NEXT_PUBLIC_ADMIN_PROFILE_DOC_ID || "default-admin";
 
 const submenuVariants = {
   hidden: { opacity: 0, height: 0, overflow: "hidden" },
@@ -178,9 +179,8 @@ const AdminHeader = ({ toggleSidebar, isCollapsed, onSignOut }: AdminHeaderProps
 
   useEffect(() => {
     const fetchAdminProfile = async () => {
-      if (!auth.currentUser) return;
       try {
-        const adminDocRef = doc(db, "adminInfo", auth.currentUser.uid);
+        const adminDocRef = doc(db, "adminInfo", ADMIN_PROFILE_DOC_ID);
         const adminDocSnap = await getDoc(adminDocRef);
         if (adminDocSnap.exists()) {
           setAdminData(adminDocSnap.data() as AdminData);
@@ -193,9 +193,8 @@ const AdminHeader = ({ toggleSidebar, isCollapsed, onSignOut }: AdminHeaderProps
   }, []);
 
   const saveAdminProfile = async (data: AdminData) => {
-    if (!auth.currentUser) return;
     try {
-      const adminDocRef = doc(db, "adminInfo", auth.currentUser.uid);
+      const adminDocRef = doc(db, "adminInfo", ADMIN_PROFILE_DOC_ID);
       await updateDoc(adminDocRef, data as Partial<AdminData> & DocumentData);
       setAdminData(data);
       setAlertMessage("Profile updated successfully!");
@@ -301,27 +300,8 @@ const AdminHeader = ({ toggleSidebar, isCollapsed, onSignOut }: AdminHeaderProps
 export default function DashboardLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const router = useRouter();
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user: FirebaseUser | null) => {
-      if (!user) {
-        setIsAuthenticated(false);
-        setIsReady(true);
-        router.replace("/login");
-        return;
-      }
-
-      setIsAuthenticated(true);
-      setIsReady(true);
-    });
-
-    return () => unsubscribe();
-  }, [router]);
 
   const currentSection = useMemo(() => {
     return pathname.split("/")[2] ?? "overview";
@@ -332,10 +312,6 @@ export default function DashboardLayout({
       .replace(/-/g, " ")
       .replace(/\b\w/g, (l) => l.toUpperCase());
   }, [currentSection]);
-
-  if (!isReady || !isAuthenticated) {
-    return null;
-  }
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-black">
@@ -351,7 +327,9 @@ export default function DashboardLayout({
         <AdminHeader
           toggleSidebar={() => setIsCollapsed((prev) => !prev)}
           isCollapsed={isCollapsed}
-          onSignOut={() => signOut(auth)}
+          onSignOut={async () => {
+            await fetch("/api/admin/logout", { method: "POST" });
+          }}
         />
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 lg:p-8">
           <div className="container mx-auto">
