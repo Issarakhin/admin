@@ -138,8 +138,8 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
                         key={subItem.id}
                         href={`/dashboard/${subItem.id}`}
                         style={{ fontSize: 12, fontWeight: 400, color: "#bdbddb" }}
-                        className={`w-full text-left px-4 py-2 text-sm rounded-md transition-all duration-200 relative ${
-                          currentSection === subItem.id ? "text-[#F87E38]" : "text-[gray-500] dark:text-gray-400 hover:text-[#F87E38] dark:hover:text-[#F87E38]"
+                        className={`block w-full text-left px-4 py-2 text-sm rounded-md transition-all duration-200 relative ${
+                          currentSection === subItem.id ? "text-[#F87E38]" : "text-gray-500 dark:text-gray-400 hover:text-[#F87E38] dark:hover:text-[#F87E38]"
                         }`}
                       >
                         <span className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-1 bg-[#F87E38] rounded-r-full opacity-0 transition-opacity" style={{ opacity: currentSection === subItem.id ? 1 : 0 }} />
