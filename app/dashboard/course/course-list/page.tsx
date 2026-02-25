@@ -280,100 +280,8 @@ const CourseList: React.FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const coursesPerPage = 5;
-
   const isValidHttpsPdfUrl = (url: string) =>
     /^https:\/\/.+\.pdf(?:[?#].*)?$/i.test(url.trim());
-
-  /* ---------- pagination helpers ---------- */
-  const indexOfLast = currentPage * coursesPerPage;
-  const indexOfFirst = indexOfLast - coursesPerPage;
-  const paginatedCourses = filteredCourses.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  const renderPageNumbers = () => {
-    const pageNumbers: React.ReactNode[] = [];
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(
-          <Button
-            key={i}
-            onClick={() => paginate(i)}
-            size="sm"
-            style={{ padding: '8px 15px', borderRadius: 15 }}
-            className={`mx-1 transition-all duration-300 ease-in-out transform hover:scale-105 ${currentPage === i
-              ? 'bg-[#2c3e50] text-white'
-              : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-              }`}
-          >
-            {i}
-          </Button>
-        );
-      }
-    } else {
-      pageNumbers.push(
-        <Button
-          key={1}
-          onClick={() => paginate(1)}
-          size="sm"
-          className={`mx-1 transition-all duration-300 ease-in-out transform hover:scale-110 ${currentPage === 1
-            ? 'bg-[#2c3e50] text-white shadow-lg'
-            : 'bg-gray-200 hover:bg-gray-300 text-gray-700 hover:shadow-md'
-            }`}
-        >
-          1
-        </Button>
-      );
-      if (currentPage > 3)
-        pageNumbers.push(
-          <span key="dots1" className="mx-2 text-gray-500">
-            ...
-          </span>
-        );
-      for (
-        let i = Math.max(2, currentPage - 1);
-        i <= Math.min(totalPages - 1, currentPage + 1);
-        i++
-      ) {
-        pageNumbers.push(
-          <Button
-            key={i}
-            onClick={() => paginate(i)}
-            size="sm"
-            className={`mx-1 transition-all duration-300 ease-in-out transform hover:scale-105 ${currentPage === i
-              ? 'bg-[#2c3e50] text-white shadow-lg'
-              : 'bg-gray-200 hover:bg-gray-300 text-gray-700 hover:shadow-md'
-              }`}
-          >
-            {i}
-          </Button>
-        );
-      }
-      if (currentPage < totalPages - 2)
-        pageNumbers.push(
-          <span key="dots2" className="mx-2 text-gray-500">
-            ...
-          </span>
-        );
-      pageNumbers.push(
-        <Button
-          key={totalPages}
-          onClick={() => paginate(totalPages)}
-          size="sm"
-          className={`mx-1 transition-all duration-300 ease-in-out transform hover:scale-105 ${currentPage === totalPages
-            ? 'bg-[#2c3e50] text-white shadow-lg'
-            : 'bg-gray-200 hover:bg-gray-300 text-gray-700 hover:shadow-md'
-            }`}
-        >
-          {totalPages}
-        </Button>
-      );
-    }
-    return pageNumbers;
-  };
 
   // Fetch courses and categories
   useEffect(() => {
@@ -946,10 +854,10 @@ const CourseList: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginatedCourses.map((course, index) => (
+                {filteredCourses.map((course, index) => (
                   <tr key={course.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                     {visibleColumns.courseTitle && (
-                      <td className="px-6 py-0">
+                      <td className="px-6 py-3">
                         <div className="flex items-center gap-3">
                           {course.profileImg && (
                             <Image
@@ -961,22 +869,22 @@ const CourseList: React.FC = () => {
                             />
                           )}
                           <div>
-                            <div style={{ fontSize: 14, fontWeight: 700, color: "#6e737c" }}>{course.courseTitle}</div>
-                            <div style={{ fontSize: 14, fontWeight: 400, color: "#6e737c" }}>{course.instructor}</div>
+                            <div style={{ fontSize: 14, fontWeight: 700, color: "#1f2937" }}>{course.courseTitle}</div>
+                            <div style={{ fontSize: 14, fontWeight: 500, color: "#374151" }}>{course.instructor}</div>
                           </div>
                         </div>
                       </td>
                     )}
                     {visibleColumns.students && (
-                      <td className="px-6 py-4 text-sm text-gray-900">{course.enrollmentCount || 0}</td>
+                      <td className="px-6 py-4 text-sm text-gray-800 font-medium">{course.enrollmentCount || 0}</td>
                     )}
                     {visibleColumns.price && (
-                      <td className="px-6 py-4" style={{ fontSize: 14, fontWeight: 700, color: "#6e737c" }}>
+                      <td className="px-6 py-4" style={{ fontSize: 14, fontWeight: 700, color: "#1f2937" }}>
                         {course.price === 'Free' ? 'Free' : `$${course.price}`}
                       </td>
                     )}
                     {visibleColumns.status && (
-                      <td className="px-6 py-0">
+                      <td className="px-6 py-3">
                         <span style={{ borderRadius: 10, paddingTop: 5, paddingBottom: 5, paddingRight: 10, paddingLeft: 10, fontSize: 14 }} className={`inline-flex px-2 py-1 ${course.isActive
                           ? 'bg-green-100 text-green-800'
                           : 'bg-red-100 text-red-800'
@@ -986,12 +894,12 @@ const CourseList: React.FC = () => {
                       </td>
                     )}
                     {visibleColumns.dateCreated && (
-                      <td className="px-6 py-4" style={{ fontSize: 14, fontWeight: 400, color: "#6e737c" }}>
+                      <td className="px-6 py-4" style={{ fontSize: 14, fontWeight: 500, color: "#374151" }}>
                         {new Date(course.createdAt).toLocaleDateString()}
                       </td>
                     )}
                     {visibleColumns.category && (
-                      <td className="px-6 py-4" style={{ fontSize: 14, fontWeight: 700, color: "#6e737c" }}>{course.categories}</td>
+                      <td className="px-6 py-4" style={{ fontSize: 14, fontWeight: 700, color: "#1f2937" }}>{course.categories}</td>
                     )}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
@@ -1027,34 +935,6 @@ const CourseList: React.FC = () => {
             </div>
           )}
 
-          {/* ---------- Pagination ---------- */}
-          {filteredCourses.length > coursesPerPage && (
-            <div className="flex justify-center items-center mt-6 gap-2 pb-4">
-              <Button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                size="sm"
-                style={{ padding: '8px 15px', borderRadius: 15 }}
-                className="transition-all duration-300 ease-in-out transform hover:scale-105 bg-gray-200 hover:bg-gray-300 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                Previous
-              </Button>
-
-              <div className="flex items-center space-x-1">
-                {renderPageNumbers()}
-              </div>
-
-              <Button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                size="sm"
-                style={{ padding: '8px 15px', borderRadius: 15 }}
-                className="transition-all duration-300 ease-in-out transform hover:scale-105 bg-gray-200 hover:bg-gray-300 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                Next
-              </Button>
-            </div>
-          )}
         </CardContent>
       </Card>
 
