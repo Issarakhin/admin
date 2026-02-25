@@ -287,7 +287,9 @@ const ListEvent = () => {
                                             <Image
                                                 src={event.imageUrl}
                                                 alt={event.title}
-                                                className="rounded-md object-cover h-full w-full"
+                                                fill
+                                                sizes="64px"
+                                                className="rounded-md object-cover"
                                             />
                                         ) : (
                                             <div className="w-full h-full bg-gray-200 rounded-md flex items-center justify-center">
