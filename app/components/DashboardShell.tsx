@@ -72,20 +72,20 @@ const menuItems: MenuItem[] = [
     icon: BookOpen,
     label: "Courses",
     subItems: [
-      { id: "course-list", label: "Course List", path: "/dashboard/course/course-list" },
-      { id: "add-course", label: "Upload Course", path: "/dashboard/course/add-course" },
-      { id: "add-course-categories", label: "Upload Course Categories", path: "/dashboard/course/add-course-categories" },
+      { id: "course-list", label: "Course List", path: "/course/course-list" },
+      { id: "add-course", label: "Upload Course", path: "/course/add-course" },
+      { id: "add-course-categories", label: "Upload Course Categories", path: "/course/add-course-categories" },
     ],
   },
-  { id: "trainers", icon: UserRound, label: "Trainers", subItems: [{ id: "list-trainers", label: "List Trainers", path: "/dashboard/trainers/list-trainers" }, { id: "add-trainer", label: "Add Trainer", path: "/dashboard/trainers/add-trainer" }] },
-  { id: "certificates", icon: FileText, label: "Certificates", subItems: [{ id: "list-certificates", label: "List Certificates", path: "/dashboard/certificates/list-certificates" }] },
-  { id: "students", icon: Users, label: "Students", subItems: [{ id: "list-student", label: "List Students", path: "/dashboard/students/list-student" }, { id: "student-enroll-recorded", label: "Enrollments", path: "/dashboard/students/student-enroll-recorded" }] },
-  { id: "blogposts", icon: Pen, label: "Blog Posts", subItems: [{ id: "add-blogpost", label: "Upload Post", path: "/dashboard/blogposts/add-blogpost" }, { id: "list-blogpost", label: "List Posts", path: "/dashboard/blogposts/list-blogpost" }] },
-  { id: "events", icon: Calendar, label: "Events", subItems: [{ id: "list-events", label: "List Events", path: "/dashboard/events/list-events" }, { id: "add-event", label: "Add Event", path: "/dashboard/events/add-event" }] },
-  { id: "notifications", icon: Bell, label: "Notifications", subItems: [{ id: "list-notification", label: "List Notifications", path: "/dashboard/notifications/list-notification" }, { id: "add-push-notification", label: "Add Push Notification", path: "/dashboard/notifications/add-push-notification" }] },
-  { id: "marketing", icon: Megaphone, label: "Marketing", subItems: [{ id: "discounts", label: "Discounts", path: "/dashboard/marketing/discounts" }] },
-  { id: "payment", icon: DollarSign, label: "Payments", subItems: [{ id: "course-sales", label: "Course Sales", path: "/dashboard/payment/course-sales" }] },
-  { id: "support", icon: HelpCircle, label: "Support", subItems: [{ id: "support-tickets", label: "Tickets", path: "/dashboard/support/support-tickets" }] },
+  { id: "trainers", icon: UserRound, label: "Trainers", subItems: [{ id: "list-trainers", label: "List Trainers", path: "/trainers/list-trainers" }, { id: "add-trainer", label: "Add Trainer", path: "/trainers/add-trainer" }] },
+  { id: "certificates", icon: FileText, label: "Certificates", subItems: [{ id: "list-certificates", label: "List Certificates", path: "/certificates/list-certificates" }] },
+  { id: "students", icon: Users, label: "Students", subItems: [{ id: "list-student", label: "List Students", path: "/students/list-student" }, { id: "student-enroll-recorded", label: "Enrollments", path: "/students/student-enroll-recorded" }] },
+  { id: "blogposts", icon: Pen, label: "Blog Posts", subItems: [{ id: "add-blogpost", label: "Upload Post", path: "/blogposts/add-blogpost" }, { id: "list-blogpost", label: "List Posts", path: "/blogposts/list-blogpost" }] },
+  { id: "events", icon: Calendar, label: "Events", subItems: [{ id: "list-events", label: "List Events", path: "/events/list-events" }, { id: "add-event", label: "Add Event", path: "/events/add-event" }] },
+  { id: "notifications", icon: Bell, label: "Notifications", subItems: [{ id: "list-notification", label: "List Notifications", path: "/notifications/list-notification" }, { id: "add-push-notification", label: "Add Push Notification", path: "/notifications/add-push-notification" }] },
+  { id: "marketing", icon: Megaphone, label: "Marketing", subItems: [{ id: "discounts", label: "Discounts", path: "/marketing/discounts" }] },
+  { id: "payment", icon: DollarSign, label: "Payments", subItems: [{ id: "course-sales", label: "Course Sales", path: "/payment/course-sales" }] },
+  { id: "support", icon: HelpCircle, label: "Support", subItems: [{ id: "support-tickets", label: "Tickets", path: "/support/support-tickets" }] },
 ];
 
 const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
@@ -102,7 +102,7 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
   return (
     <aside className={`h-full bg-white dark:bg-gray-900 shadow-lg transition-all duration-300 ease-in-out ${isCollapsed ? "w-20" : "w-64"} flex flex-col`}>
       <div className="flex items-center justify-between dark:border-gray-800 px-4 bg-[#2c3e50]" style={{ paddingTop: 8, paddingBottom: 8, borderBottomWidth: 1, borderColor: "#34495e" }}>
-        <Link href="/dashboard/overview" passHref>
+        <Link href="/overview" passHref>
           <div className={`flex items-center space-x-3 ${isCollapsed ? "justify-center w-full" : ""}`}>
             <Image src={DGLOGO} width={40} height={40} alt="DGLOGO" style={{ borderRadius: 5 }} />
             {!isCollapsed && <span className="text-[#2c3e50] dark:text-[#fff]" style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>Admin Dashboard</span>}
@@ -145,7 +145,7 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
                     {item.subItems?.map((subItem) => (
                       <Link
                         key={subItem.id}
-                        href={subItem.path ?? `/dashboard/${subItem.id}`}
+                        href={subItem.path ?? `/${subItem.id}`}
                         style={{ fontSize: 12, fontWeight: 400, color: "#bdbddb" }}
                         className={`block w-full text-left px-4 py-2 text-sm rounded-md transition-all duration-200 relative ${
                           currentSection === subItem.id ? "text-[#F87E38]" : "text-gray-500 dark:text-gray-400 hover:text-[#F87E38] dark:hover:text-[#F87E38]"
@@ -306,7 +306,7 @@ const AdminHeader = ({ toggleSidebar, isCollapsed, onSignOut }: AdminHeaderProps
   );
 };
 
-export default function DashboardLayout({
+export default function DashboardShell({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import RegisterPush from "@/app/components/RegisterPush"; // ← new
+import AppLayoutRouter from "@/app/components/AppLayoutRouter";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -24,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${nunito.variable} antialiased`} suppressHydrationWarning>
         <RegisterPush /> {/* ← invisible, registers push token */}
-        {children}
+        <AppLayoutRouter>{children}</AppLayoutRouter>
       </body>
     </html>
   );

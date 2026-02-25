@@ -73,7 +73,7 @@ export default function AuthPreview() {
 
   const handleModalClose = () => {
     if (modalConfig.type === "success" && isAuthenticated) {
-      router.push("/dashboard/overview");
+      router.push("/overview");
     }
     setModalConfig({ show: false, message: "", type: "loading" });
   };
