@@ -44,7 +44,7 @@ interface MenuItem {
   id: string;
   icon: React.ComponentType<{ className?: string }>;
   label: string;
-  subItems?: { id: string; label: string }[];
+  subItems?: { id: string; label: string; path?: string }[];
 }
 
 interface SidebarProps {
@@ -67,16 +67,25 @@ const submenuVariants = {
 
 const menuItems: MenuItem[] = [
   { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", subItems: [{ id: "overview", label: "Overview" }] },
-  { id: "courses", icon: BookOpen, label: "Courses", subItems: [{ id: "course-list", label: "Course List" }, { id: "add-course", label: "Upload Course" }, { id: "add-course-categories", label: "Upload Course Categories" }] },
-  { id: "trainers", icon: UserRound, label: "Trainers", subItems: [{ id: "list-trainers", label: "List Trainers" }, { id: "add-trainer", label: "Add Trainer" }] },
-  { id: "certificates", icon: FileText, label: "Certificates", subItems: [{ id: "list-certificates", label: "List Certificates" }] },
-  { id: "students", icon: Users, label: "Students", subItems: [{ id: "list-student", label: "List Students" }, { id: "student-enroll-recorded", label: "Enrollments" }] },
-  { id: "blogposts", icon: Pen, label: "Blog Posts", subItems: [{ id: "add-blogpost", label: "Upload Post" }, { id: "list-blogpost", label: "List Posts" }] },
-  { id: "events", icon: Calendar, label: "Events", subItems: [{ id: "list-events", label: "List Events" }, { id: "add-event", label: "Add Event" }] },
-  { id: "notifications", icon: Bell, label: "Notifications", subItems: [{ id: "list-notification", label: "List Notifications" }, { id: "add-push-notification", label: "Add Push Notification" }] },
-  { id: "marketing", icon: Megaphone, label: "Marketing", subItems: [{ id: "discounts", label: "Discounts" }] },
-  { id: "payment", icon: DollarSign, label: "Payments", subItems: [{ id: "course-sales", label: "Course Sales" }] },
-  { id: "support", icon: HelpCircle, label: "Support", subItems: [{ id: "support-tickets", label: "Tickets" }] },
+  {
+    id: "courses",
+    icon: BookOpen,
+    label: "Courses",
+    subItems: [
+      { id: "course-list", label: "Course List", path: "/dashboard/course/course-list" },
+      { id: "add-course", label: "Upload Course", path: "/dashboard/course/add-course" },
+      { id: "add-course-categories", label: "Upload Course Categories", path: "/dashboard/course/add-course-categories" },
+    ],
+  },
+  { id: "trainers", icon: UserRound, label: "Trainers", subItems: [{ id: "list-trainers", label: "List Trainers", path: "/dashboard/trainers/list-trainers" }, { id: "add-trainer", label: "Add Trainer", path: "/dashboard/trainers/add-trainer" }] },
+  { id: "certificates", icon: FileText, label: "Certificates", subItems: [{ id: "list-certificates", label: "List Certificates", path: "/dashboard/certificates/list-certificates" }] },
+  { id: "students", icon: Users, label: "Students", subItems: [{ id: "list-student", label: "List Students", path: "/dashboard/students/list-student" }, { id: "student-enroll-recorded", label: "Enrollments", path: "/dashboard/students/student-enroll-recorded" }] },
+  { id: "blogposts", icon: Pen, label: "Blog Posts", subItems: [{ id: "add-blogpost", label: "Upload Post", path: "/dashboard/blogposts/add-blogpost" }, { id: "list-blogpost", label: "List Posts", path: "/dashboard/blogposts/list-blogpost" }] },
+  { id: "events", icon: Calendar, label: "Events", subItems: [{ id: "list-events", label: "List Events", path: "/dashboard/events/list-events" }, { id: "add-event", label: "Add Event", path: "/dashboard/events/add-event" }] },
+  { id: "notifications", icon: Bell, label: "Notifications", subItems: [{ id: "list-notification", label: "List Notifications", path: "/dashboard/notifications/list-notification" }, { id: "add-push-notification", label: "Add Push Notification", path: "/dashboard/notifications/add-push-notification" }] },
+  { id: "marketing", icon: Megaphone, label: "Marketing", subItems: [{ id: "discounts", label: "Discounts", path: "/dashboard/marketing/discounts" }] },
+  { id: "payment", icon: DollarSign, label: "Payments", subItems: [{ id: "course-sales", label: "Course Sales", path: "/dashboard/payment/course-sales" }] },
+  { id: "support", icon: HelpCircle, label: "Support", subItems: [{ id: "support-tickets", label: "Tickets", path: "/dashboard/support/support-tickets" }] },
 ];
 
 const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
@@ -136,7 +145,7 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
                     {item.subItems?.map((subItem) => (
                       <Link
                         key={subItem.id}
-                        href={`/dashboard/${subItem.id}`}
+                        href={subItem.path ?? `/dashboard/${subItem.id}`}
                         style={{ fontSize: 12, fontWeight: 400, color: "#bdbddb" }}
                         className={`block w-full text-left px-4 py-2 text-sm rounded-md transition-all duration-200 relative ${
                           currentSection === subItem.id ? "text-[#F87E38]" : "text-gray-500 dark:text-gray-400 hover:text-[#F87E38] dark:hover:text-[#F87E38]"
@@ -304,7 +313,8 @@ export default function DashboardLayout({
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const currentSection = useMemo(() => {
-    return pathname.split("/")[2] ?? "overview";
+    const segments = pathname.split("/").filter(Boolean);
+    return segments.length <= 1 ? "overview" : segments[segments.length - 1];
   }, [pathname]);
 
   const pageTitle = useMemo(() => {
