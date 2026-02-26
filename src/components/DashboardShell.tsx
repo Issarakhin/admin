@@ -44,6 +44,7 @@ interface MenuItem {
   id: string;
   icon: React.ComponentType<{ className?: string }>;
   label: string;
+  path?: string;
   subItems?: { id: string; label: string; path?: string }[];
 }
 
@@ -66,7 +67,7 @@ const submenuVariants = {
 };
 
 const menuItems: MenuItem[] = [
-  { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", subItems: [{ id: "overview", label: "Overview" }] },
+  { id: "overview", icon: LayoutDashboard, label: "Overview", path: "/overview" },
   {
     id: "courses",
     icon: BookOpen,
@@ -78,19 +79,18 @@ const menuItems: MenuItem[] = [
     ],
   },
   { id: "trainers", icon: UserRound, label: "Trainers", subItems: [{ id: "list-trainers", label: "List Trainers", path: "/trainers/list-trainers" }, { id: "add-trainer", label: "Add Trainer", path: "/trainers/add-trainer" }] },
-  { id: "certificates", icon: FileText, label: "Certificates", subItems: [{ id: "list-certificates", label: "List Certificates", path: "/certificates/list-certificates" }] },
+  { id: "list-certificates", icon: FileText, label: "Certificates", path: "/certificates/list-certificates" },
   { id: "students", icon: Users, label: "Students", subItems: [{ id: "list-student", label: "List Students", path: "/students/list-student" }, { id: "student-enroll-recorded", label: "Enrollments", path: "/students/student-enroll-recorded" }] },
   { id: "blogposts", icon: Pen, label: "Blog Posts", subItems: [{ id: "add-blogpost", label: "Upload Post", path: "/blogposts/add-blogpost" }, { id: "list-blogpost", label: "List Posts", path: "/blogposts/list-blogpost" }] },
   { id: "events", icon: Calendar, label: "Events", subItems: [{ id: "list-events", label: "List Events", path: "/events/list-events" }, { id: "add-event", label: "Add Event", path: "/events/add-event" }] },
   { id: "notifications", icon: Bell, label: "Notifications", subItems: [{ id: "list-notification", label: "List Notifications", path: "/notifications/list-notification" }, { id: "add-push-notification", label: "Add Push Notification", path: "/notifications/add-push-notification" }] },
-  { id: "marketing", icon: Megaphone, label: "Marketing", subItems: [{ id: "discounts", label: "Discounts", path: "/marketing/discounts" }] },
-  { id: "payment", icon: DollarSign, label: "Payments", subItems: [{ id: "course-sales", label: "Course Sales", path: "/payment/course-sales" }] },
-  { id: "support", icon: HelpCircle, label: "Support", subItems: [{ id: "support-tickets", label: "Tickets", path: "/support/support-tickets" }] },
+  { id: "discounts", icon: Megaphone, label: "Marketing", path: "/marketing/discounts" },
+  { id: "course-sales", icon: DollarSign, label: "Payments", path: "/payment/course-sales" },
+  { id: "support-tickets", icon: HelpCircle, label: "Support", path: "/support/support-tickets" },
 ];
 
 const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
-    dashboard: true,
     courses: true,
   });
   const currentYear = new Date().getFullYear();
@@ -115,26 +115,42 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
           const hasActiveSubItem =
             item.subItems?.some((subItem) => subItem.id === currentSection) ??
             false;
+          const isActiveItem = item.id === currentSection || hasActiveSubItem;
 
           return (
             <div key={item.id} className="px-3">
-              <button
-                onClick={() => item.subItems && toggleExpand(item.id)}
-                style={{ fontSize: 14, fontWeight: 600, borderRadius: 15, color: "#fff" }}
-                className={`w-full flex items-center justify-between px-4 py-2 my-1 transition-all duration-200 ${
-                  hasActiveSubItem ? "bg-[#F87E38] shadow-lg" : "text-[#2c3e50] dark:text-gray-400 hover:bg-[#F87E38] dark:hover:bg-gray-800"
-                } ${isCollapsed ? "justify-center" : ""}`}
-              >
-                <div className="flex items-center space-x-3">
-                  <item.icon className="w-5 h-5" />
-                  {!isCollapsed && <span>{item.label}</span>}
-                </div>
-                {!isCollapsed && item.subItems && (
-                  <ChevronDown className={`w-5 h-5 transition-transform ${expandedItems[item.id] ? "rotate-180" : ""}`} />
-                )}
-              </button>
+              {item.subItems ? (
+                <button
+                  onClick={() => toggleExpand(item.id)}
+                  style={{ fontSize: 14, fontWeight: 600, borderRadius: 15, color: "#fff" }}
+                  className={`w-full flex items-center justify-between px-4 py-2 my-1 transition-all duration-200 ${
+                    isActiveItem ? "bg-[#F87E38] shadow-lg" : "text-[#2c3e50] dark:text-gray-400 hover:bg-[#F87E38] dark:hover:bg-gray-800"
+                  } ${isCollapsed ? "justify-center" : ""}`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <item.icon className="w-5 h-5" />
+                    {!isCollapsed && <span>{item.label}</span>}
+                  </div>
+                  {!isCollapsed && (
+                    <ChevronDown className={`w-5 h-5 transition-transform ${expandedItems[item.id] ? "rotate-180" : ""}`} />
+                  )}
+                </button>
+              ) : (
+                <Link
+                  href={item.path ?? `/${item.id}`}
+                  style={{ fontSize: 14, fontWeight: 600, borderRadius: 15, color: "#fff" }}
+                  className={`w-full flex items-center px-4 py-2 my-1 transition-all duration-200 ${
+                    isActiveItem ? "bg-[#F87E38] shadow-lg" : "text-[#2c3e50] dark:text-gray-400 hover:bg-[#F87E38] dark:hover:bg-gray-800"
+                  } ${isCollapsed ? "justify-center" : ""}`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <item.icon className="w-5 h-5" />
+                    {!isCollapsed && <span>{item.label}</span>}
+                  </div>
+                </Link>
+              )}
               <AnimatePresence>
-                {!isCollapsed && expandedItems[item.id] && (
+                {!isCollapsed && item.subItems && expandedItems[item.id] && (
                   <motion.div
                     variants={submenuVariants}
                     initial="hidden"
