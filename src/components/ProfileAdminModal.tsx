@@ -58,14 +58,14 @@ const ProfileAdminModal = ({ isOpen, onClose, adminData, onSave }: ProfileAdminM
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-[#fff] dark:bg-gray-900 p-8 rounded-2xl shadow-2xl w-full max-w-md"
+            className="bg-[#fff] p-8 rounded-2xl shadow-2xl w-full max-w-md"
           >
-            <h2 className=" text-center mb-6 text-gray-800 dark:text-white" style={{ fontSize: 20, fontWeight: 700 }}>
+            <h2 className=" text-center mb-6 text-gray-800" style={{ fontSize: 20, fontWeight: 700 }}>
               Admin Profile
             </h2>
             <div className="space-y-6">
               <div>
-                <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block mb-2 text-sm font-semibold text-slate-700">
                   Username:
                 </label>
                 {isEditing ? (
@@ -77,11 +77,11 @@ const ProfileAdminModal = ({ isOpen, onClose, adminData, onSave }: ProfileAdminM
                     style={{ fontSize: 15 }}
                     className="
                   w-full h-[40px] px-4
-                  bg-white dark:bg-slate-800
-                  border border-slate-300 dark:border-slate-600
+                  bg-white
+                  border border-slate-300
                   rounded-[15px]
-                  text-slate-900 dark:text-slate-100
-                  placeholder-slate-400 dark:placeholder-slate-500
+                  text-slate-900
+                  placeholder-slate-400
                   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
                   transition-all duration-200 ease-in-out
                 "
@@ -89,8 +89,8 @@ const ProfileAdminModal = ({ isOpen, onClose, adminData, onSave }: ProfileAdminM
                 ) : (
                   <p className="
                 w-full min-h-[40px] px-4 py-2.5
-                bg-slate-100 dark:bg-slate-800
-                text-slate-900 dark:text-slate-100
+                bg-slate-100
+                text-slate-900
                 rounded-[15px]
               ">
                     {formData.username}
@@ -99,13 +99,13 @@ const ProfileAdminModal = ({ isOpen, onClose, adminData, onSave }: ProfileAdminM
               </div>
 
               <div>
-                <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block mb-2 text-sm font-semibold text-slate-700">
                   Email:
                 </label>
                 <p className="
                   w-full min-h-[40px] px-4 py-2.5
-                  bg-slate-100 dark:bg-slate-800
-                  text-slate-900 dark:text-slate-100
+                  bg-slate-100
+                  text-slate-900
                   rounded-[15px]
                 ">
                   {formData.email}
@@ -113,13 +113,13 @@ const ProfileAdminModal = ({ isOpen, onClose, adminData, onSave }: ProfileAdminM
               </div>
 
               <div>
-                <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                <label className="block mb-2 text-sm font-semibold text-slate-700">
                   Role:
                 </label>
                 <p className="
                 w-full min-h-[40px] px-4 py-2.5
-                bg-slate-100 dark:bg-slate-800
-                text-slate-900 dark:text-slate-100
+                bg-slate-100
+                text-slate-900
                 rounded-[15px]
               ">
                   {formData.role}

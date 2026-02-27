@@ -36,7 +36,7 @@ const DashboardAlertModal = ({ isOpen, onClose, message, isSuccess }: DashboardA
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center"
+            className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center"
           >
             <div className={`mx-auto flex items-center justify-center h-16 w-16 ${isSuccess ? "bg-green-100" : "bg-red-100"} mb-5`}>
               {isSuccess ? (
@@ -45,8 +45,8 @@ const DashboardAlertModal = ({ isOpen, onClose, message, isSuccess }: DashboardA
                 <XIcon className="h-8 w-8 text-red-600" />
               )}
             </div>
-            <h2 className="text-2xl font-bold mb-2 text-gray-800 dark:text-white">{isSuccess ? "Success!" : "Operation Failed"}</h2>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">{message}</p>
+            <h2 className="text-2xl font-bold mb-2 text-gray-800">{isSuccess ? "Success!" : "Operation Failed"}</h2>
+            <p className="text-gray-500 mb-6">{message}</p>
             <button
               onClick={onClose}
               className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition"

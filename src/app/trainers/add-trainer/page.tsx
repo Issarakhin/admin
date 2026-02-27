@@ -375,27 +375,27 @@ const UploadTrainer: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4 sm:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6">
       <Alert {...alert} onClose={() => setAlert((prev) => ({ ...prev, isVisible: false }))} />
 
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden"
+          className="bg-white rounded-2xl shadow-xl overflow-hidden"
         >
           <form onSubmit={handleSubmit} className="p-6 sm:p-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Profile Image and Cover Section */}
               <div className="lg:col-span-1">
                 <div className="sticky top-6">
-                  <h3 className=" dark:text-white mb-4 flex items-center" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                  <h3 className=" mb-4 flex items-center" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                     <Camera className="w-5 h-5 mr-2" />
                     Profile Photo & Cover
                   </h3>
 
                   <div className="relative mb-4">
-                    <div className="w-full h-32 bg-gray-200 dark:bg-gray-600 rounded-xl overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-blue-400 transition-colors group">
+                    <div className="w-full h-32 bg-gray-200 rounded-xl overflow-hidden border-2 border-dashed border-gray-300 hover:border-blue-400 transition-colors group">
                       {coverImagePreview ? (
                         <Image
                           src={coverImagePreview}
@@ -446,7 +446,7 @@ const UploadTrainer: React.FC = () => {
                   )}
 
                   <div className="relative">
-                    <div className="w-full aspect-square bg-gray-100 dark:bg-gray-700 rounded-2xl overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-blue-400 transition-colors group">
+                    <div className="w-full aspect-square bg-gray-100 rounded-2xl overflow-hidden border-2 border-dashed border-gray-300 hover:border-blue-400 transition-colors group">
                       {imagePreview ? (
                         <Image
                           src={imagePreview}
@@ -504,14 +504,14 @@ const UploadTrainer: React.FC = () => {
               <div className="lg:col-span-2 space-y-8">
                 {/* Basic Information */}
                 <div>
-                  <h3 className=" dark:text-white mb-6 flex items-center" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                  <h3 className=" mb-6 flex items-center" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                     <User className="w-5 h-5 mr-2" />
                     Basic Information
                   </h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block dark:text-gray-300 mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                      <label className="block mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                         Instructor:
                       </label>
                       <input
@@ -520,14 +520,14 @@ const UploadTrainer: React.FC = () => {
                         value={formData.instructor}
                         onChange={handleInputChange}
                         style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                        className="w-full px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                         placeholder="Enter instructor name"
                         aria-required="true"
                       />
                     </div>
 
                     <div>
-                      <label className="block dark:text-gray-300 mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                      <label className="block mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                         Email Address:
                       </label>
                       <div className="relative">
@@ -538,7 +538,7 @@ const UploadTrainer: React.FC = () => {
                           value={formData.email}
                           onChange={handleInputChange}
                           style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                          className="w-full pl-11 pr-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                          className="w-full pl-11 pr-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                           placeholder="trainer@example.com"
                           aria-required="true"
                         />
@@ -546,7 +546,7 @@ const UploadTrainer: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block dark:text-gray-300 mb-2"  style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                      <label className="block mb-2"  style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                         Phone Number:
                       </label>
                       <div className="relative">
@@ -557,7 +557,7 @@ const UploadTrainer: React.FC = () => {
                           value={formData.phone}
                           onChange={handleInputChange}
                           style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                          className="w-full pl-11 pr-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                          className="w-full pl-11 pr-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                           placeholder="+1 (555) 123-4567"
                           aria-required="true"
                         />
@@ -565,7 +565,7 @@ const UploadTrainer: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block dark:text-gray-300 mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                      <label className="block mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                         Location:
                       </label>
                       <div className="relative">
@@ -576,14 +576,14 @@ const UploadTrainer: React.FC = () => {
                           value={formData.location}
                           onChange={handleInputChange}
                           style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                          className="w-full pl-11 pr-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                          className="w-full pl-11 pr-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                           placeholder="City, Country"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block dark:text-gray-300 mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                      <label className="block mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                         Date:
                       </label>
                       <input
@@ -592,7 +592,7 @@ const UploadTrainer: React.FC = () => {
                         value={formData.date}
                         onChange={handleInputChange}
                         style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                        className="w-full px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                         placeholder="Enter date"
                         readOnly
                         aria-required="true"
@@ -600,7 +600,7 @@ const UploadTrainer: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block dark:text-gray-300 mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                      <label className="block mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                         Hourly Rate:
                       </label>
                       <input
@@ -609,7 +609,7 @@ const UploadTrainer: React.FC = () => {
                         value={formData.hourlyRate}
                         onChange={handleInputChange}
                         style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                        className="w-full px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                         placeholder="$50/hour"
                       />
                     </div>
@@ -618,7 +618,7 @@ const UploadTrainer: React.FC = () => {
 
                 {/* Bio Section */}
                 <div>
-                  <label className="block dark:text-gray-300 mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                  <label className="block mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                     Biography:
                   </label>
                   <textarea
@@ -627,7 +627,7 @@ const UploadTrainer: React.FC = () => {
                     onChange={handleInputChange}
                     rows={4}
                     style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors resize-none"
+                    className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors resize-none"
                     placeholder="Tell us about the trainer's background, experience, and teaching philosophy..."
                     aria-required="true"
                   />
@@ -635,14 +635,14 @@ const UploadTrainer: React.FC = () => {
 
                 {/* Professional Details */}
                 <div>
-                  <h3 className="text-lg dark:text-white mb-6 flex items-center" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                  <h3 className="text-lg mb-6 flex items-center" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                     <Award className="w-5 h-5 mr-2" />
                     Professional Details
                   </h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block dark:text-gray-300 mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                      <label className="block mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                         Years of Experience:
                       </label>
                       <select
@@ -650,7 +650,7 @@ const UploadTrainer: React.FC = () => {
                         value={formData.experience}
                         onChange={handleInputChange}
                         style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                        className="w-full px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                       >
                         <option value="" className="hover:bg-[#F97E38] hover:text-[#fff]" style={{borderRadius: 15}}>Select experience</option>
                         <option value="0-1" className="hover:bg-[#F97E38] hover:text-[#fff]">0-1 years</option>
@@ -661,7 +661,7 @@ const UploadTrainer: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block dark:text-gray-300 mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                      <label className="block mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                         Availability:
                       </label>
                       <select
@@ -669,7 +669,7 @@ const UploadTrainer: React.FC = () => {
                         value={formData.availability}
                         onChange={handleInputChange}
                         style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                        className="w-full px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                       >
                         <option value="Full-time">Full-time</option>
                         <option value="Part-time">Part-time</option>
@@ -682,7 +682,7 @@ const UploadTrainer: React.FC = () => {
 
                 {/* Skills */}
                 <div>
-                  <label className="block dark:text-gray-300 mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                  <label className="block mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                     Skills:
                   </label>
                   <div className="flex space-x-2 mb-3">
@@ -691,7 +691,7 @@ const UploadTrainer: React.FC = () => {
                       value={newSkill}
                       onChange={(e) => setNewSkill(e.target.value)}
                       style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                      className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                      className="flex-1 px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                       placeholder="Add skill"
                       onKeyPress={(e) =>
                         e.key === "Enter" &&
@@ -734,7 +734,7 @@ const UploadTrainer: React.FC = () => {
 
                 {/* Certifications */}
                 <div>
-                  <label className="block dark:text-gray-300 mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                  <label className="block mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                     Certifications:
                   </label>
                   <div className="flex space-x-2 mb-3">
@@ -743,7 +743,7 @@ const UploadTrainer: React.FC = () => {
                       value={newCertification}
                       onChange={(e) => setNewCertification(e.target.value)}
                       style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                      className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                      className="flex-1 px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                       placeholder="Add certification"
                       onKeyPress={(e) =>
                         e.key === "Enter" &&
@@ -784,7 +784,7 @@ const UploadTrainer: React.FC = () => {
 
                 {/* Languages */}
                 <div>
-                  <label className="block dark:text-gray-300 mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                  <label className="block mb-2" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                     Languages:
                   </label>
                   <div className="flex space-x-2 mb-3">
@@ -793,7 +793,7 @@ const UploadTrainer: React.FC = () => {
                       value={newLanguage}
                       onChange={(e) => setNewLanguage(e.target.value)}
                       style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                      className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                      className="flex-1 px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                       placeholder="Add language"
                       onKeyPress={(e) =>
                         e.key === "Enter" &&
@@ -833,7 +833,7 @@ const UploadTrainer: React.FC = () => {
 
                 {/* Social Links */}
                 <div>
-                  <h3 className="text-lg dark:text-white mb-6" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
+                  <h3 className="text-lg mb-6" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>
                     Social Links:
                   </h3>
 
@@ -843,7 +843,7 @@ const UploadTrainer: React.FC = () => {
                         value={newSocialPlatform}
                         onChange={(e) => setNewSocialPlatform(e.target.value)}
                         style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                        className="w-1/3 px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                        className="w-1/3 px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                         aria-label="Select social platform"
                       >
                         <option value="">Select platform</option>
@@ -858,7 +858,7 @@ const UploadTrainer: React.FC = () => {
                         value={newSocialUrl}
                         onChange={(e) => setNewSocialUrl(e.target.value)}
                         style={{borderRadius: 15, fontSize: 15, fontWeight: 400, color: "#2c3e50"}}
-                        className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                        className="flex-1 px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-[#2c3e50] focus:border-[#2c3e50] bg-white text-gray-900 transition-colors"
                         placeholder="Enter URL"
                         onKeyPress={(e) =>
                           e.key === "Enter" && (e.preventDefault(), addSocialLink())
@@ -920,7 +920,7 @@ const UploadTrainer: React.FC = () => {
               <button
                 type="button"
                 style={{borderRadius: 15, paddingTop: 8, paddingBottom: 8, paddingLeft: 15, paddingRight: 15, fontSize: 15, fontWeight: 400 }}
-                className="px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center"
+                className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors flex items-center"
                 aria-label="Preview trainer profile"
               >
                 <Eye className="w-5 h-5 mr-2" />

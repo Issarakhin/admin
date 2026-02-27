@@ -100,12 +100,12 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
   };
 
   return (
-    <aside className={`h-full bg-white dark:bg-gray-900 shadow-lg transition-all duration-300 ease-in-out ${isCollapsed ? "w-20" : "w-64"} flex flex-col`}>
-      <div className="flex items-center justify-between dark:border-gray-800 px-4 bg-[#2c3e50]" style={{ paddingTop: 8, paddingBottom: 8, borderBottomWidth: 1, borderColor: "#34495e" }}>
+    <aside className={`h-full bg-white shadow-lg transition-all duration-300 ease-in-out ${isCollapsed ? "w-20" : "w-64"} flex flex-col`}>
+      <div className="flex items-center justify-between px-4 bg-[#2c3e50]" style={{ paddingTop: 8, paddingBottom: 8, borderBottomWidth: 1, borderColor: "#34495e" }}>
         <Link href="/overview" passHref>
           <div className={`flex items-center space-x-3 ${isCollapsed ? "justify-center w-full" : ""}`}>
             <Image src={DGLOGO} width={40} height={40} alt="DGLOGO" style={{ borderRadius: 5 }} />
-            {!isCollapsed && <span className="text-[#2c3e50] dark:text-[#fff]" style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>Admin Dashboard</span>}
+            {!isCollapsed && <span className="text-[#fff]" style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>Admin Dashboard</span>}
           </div>
         </Link>
       </div>
@@ -124,7 +124,7 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
                   onClick={() => toggleExpand(item.id)}
                   style={{ fontSize: 14, fontWeight: 600, borderRadius: 15, color: "#fff" }}
                   className={`w-full flex items-center justify-between px-4 py-2 my-1 transition-all duration-200 ${
-                    isActiveItem ? "bg-[#F87E38] shadow-lg" : "text-[#2c3e50] dark:text-gray-400 hover:bg-[#F87E38] dark:hover:bg-gray-800"
+                    isActiveItem ? "bg-[#F87E38] shadow-lg text-white" : "text-white hover:bg-[#F87E38]"
                   } ${isCollapsed ? "justify-center" : ""}`}
                 >
                   <div className="flex items-center space-x-3">
@@ -140,7 +140,7 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
                   href={item.path ?? `/${item.id}`}
                   style={{ fontSize: 14, fontWeight: 600, borderRadius: 15, color: "#fff" }}
                   className={`w-full flex items-center px-4 py-2 my-1 transition-all duration-200 ${
-                    isActiveItem ? "bg-[#F87E38] shadow-lg" : "text-[#2c3e50] dark:text-gray-400 hover:bg-[#F87E38] dark:hover:bg-gray-800"
+                    isActiveItem ? "bg-[#F87E38] shadow-lg text-white" : "text-white hover:bg-[#F87E38]"
                   } ${isCollapsed ? "justify-center" : ""}`}
                 >
                   <div className="flex items-center space-x-3">
@@ -162,9 +162,9 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
                       <Link
                         key={subItem.id}
                         href={subItem.path ?? `/${subItem.id}`}
-                        style={{ fontSize: 12, fontWeight: 400, color: "#bdbddb" }}
+                        style={{ fontSize: 12, fontWeight: 400 }}
                         className={`block w-full text-left px-4 py-2 text-sm rounded-md transition-all duration-200 relative ${
-                          currentSection === subItem.id ? "text-[#F87E38]" : "text-gray-500 dark:text-gray-400 hover:text-[#F87E38] dark:hover:text-[#F87E38]"
+                          currentSection === subItem.id ? "text-[#F87E38]" : "text-[#d7deea] hover:text-[#F87E38]"
                         }`}
                       >
                         <span className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-1 bg-[#F87E38] rounded-r-full opacity-0 transition-opacity" style={{ opacity: currentSection === subItem.id ? 1 : 0 }} />
@@ -247,9 +247,9 @@ const AdminHeader = ({ toggleSidebar, isCollapsed, onSignOut }: AdminHeaderProps
   };
 
   return (
-    <header style={{ paddingLeft: 20, paddingRight: 20 }} className="flex justify-between items-center p-2 bg-white dark:bg-gray-900 text-black dark:text-white border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40">
+    <header style={{ paddingLeft: 20, paddingRight: 20 }} className="flex justify-between items-center p-2 bg-white text-black border-b border-gray-200 sticky top-0 z-40">
       <div className="flex items-center space-x-4">
-        <button onClick={toggleSidebar} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors md:hidden">
+        <button onClick={toggleSidebar} className="p-2 rounded-full hover:bg-gray-100 transition-colors md:hidden">
           {isCollapsed ? <ChevronRight className="w-6 h-6" /> : <ChevronLeft className="w-6 h-6" />}
         </button>
         <div className="relative hidden md:block">
@@ -258,32 +258,32 @@ const AdminHeader = ({ toggleSidebar, isCollapsed, onSignOut }: AdminHeaderProps
             type="text"
             placeholder="Search..."
             style={{ fontSize: 15, borderRadius: 15 }}
-            className="pl-10 pr-4 py-2 w-72 bg-gray-100 dark:bg-gray-800 border-transparent focus:outline-none focus:ring-2 focus:ring-[#2c3e50] transition"
+            className="pl-10 pr-4 py-2 w-72 bg-gray-100 border-transparent focus:outline-none focus:ring-2 focus:ring-[#2c3e50] transition"
           />
         </div>
       </div>
       <div className="flex items-center space-x-4 sm:space-x-6">
-        <button className="hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-full transition-colors relative">
-          <Bell className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-          <span className="absolute w-6 h-6 bg-red-500 rounded-full border-2 border-white dark:border-gray-900" style={{ marginTop: -33, fontSize: 14, color: "#fff", textAlign: "center", alignItems: "center" }}>0</span>
+        <button className="hover:bg-gray-100 p-2 rounded-full transition-colors relative">
+          <Bell className="w-6 h-6 text-gray-600" />
+          <span className="absolute w-6 h-6 bg-red-500 rounded-full border-2 border-white" style={{ marginTop: -33, fontSize: 14, color: "#fff", textAlign: "center", alignItems: "center" }}>0</span>
         </button>
         <DropdownMenu>
           <DropdownMenuTrigger className="focus:outline-none rounded-full">
             <div className="flex items-center space-x-3 cursor-pointer">
-              <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                 {adminData?.profileImage ? (
                   <Image src={adminData.profileImage} alt="Admin" width={40} height={40} className="w-full h-full object-cover" />
                 ) : (
-                  <User className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                  <User className="w-6 h-6 text-gray-600" />
                 )}
               </div>
               <div className="hidden md:block">
                 <p className="font-semibold text-sm">{adminData?.username || "Admin"}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{adminData?.role || "Administrator"}</p>
+                <p className="text-xs text-gray-500">{adminData?.role || "Administrator"}</p>
               </div>
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 mt-2" style={{ borderRadius: 15 }}>
+          <DropdownMenuContent align="end" className="w-56 bg-white border-gray-200 mt-2" style={{ borderRadius: 15 }}>
             <DropdownMenuItem className="cursor-pointer hover:bg-[#F87E38] hover:text-[#fff]" onClick={() => setIsProfileModalOpen(true)} style={{ paddingLeft: 15, paddingRight: 15, borderRadius: 12 }}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
@@ -292,7 +292,7 @@ const AdminHeader = ({ toggleSidebar, isCollapsed, onSignOut }: AdminHeaderProps
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
+            <DropdownMenuSeparator className="bg-gray-200" />
             <DropdownMenuItem className="cursor-pointer text-[#FB4455] focus:text-[#FB4455] hover:bg-[#FB4455] hover:text-[#fff]" onClick={() => setIsSignOutModalOpen(true)} style={{ paddingLeft: 15, paddingRight: 15, borderRadius: 12 }}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>{isLoading ? "Signing out..." : "Sign out"}</span>
@@ -340,7 +340,7 @@ export default function DashboardShell({
   }, [currentSection]);
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-black">
+    <div className="flex h-screen bg-gray-50">
       <div
         className={`fixed inset-y-0 left-0 z-50 md:relative md:z-auto transform ${
           isCollapsed ? "-translate-x-full" : "translate-x-0"

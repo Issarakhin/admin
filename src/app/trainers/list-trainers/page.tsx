@@ -125,7 +125,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm,
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-2xl w-full max-w-md"
+            className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md"
           >
             <div className={`mx-auto flex items-center justify-center h-16 w-16 rounded-full mb-4 ${type === 'danger' ? 'bg-red-100' : 'bg-yellow-100'
               }`}>
@@ -135,12 +135,12 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm,
                 <AlertCircle className="h-8 w-8 text-yellow-600" />
               )}
             </div>
-            <h2 className="text-2xl font-bold text-center mb-2 text-gray-800 dark:text-white">{title}</h2>
-            <p className="text-gray-600 dark:text-gray-300 text-center mb-6">{message}</p>
+            <h2 className="text-2xl font-bold text-center mb-2 text-gray-800">{title}</h2>
+            <p className="text-gray-600 text-center mb-6">{message}</p>
             <div className="flex space-x-4">
               <button
                 onClick={onClose}
-                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>
@@ -177,7 +177,7 @@ const TrainerDetailModal: React.FC<TrainerDetailModalProps> = ({ isOpen, onClose
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-t-2xl">
@@ -211,17 +211,17 @@ const TrainerDetailModal: React.FC<TrainerDetailModalProps> = ({ isOpen, onClose
               {/* Left Column */}
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Contact Information</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3">Contact Information</h3>
                   <div className="space-y-3">
-                    <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
+                    <div className="flex items-center space-x-3 text-gray-600">
                       <Mail className="w-5 h-5" />
                       <span>{trainer.email}</span>
                     </div>
-                    <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
+                    <div className="flex items-center space-x-3 text-gray-600">
                       <Phone className="w-5 h-5" />
                       <span>{trainer.phone}</span>
                     </div>
-                    <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
+                    <div className="flex items-center space-x-3 text-gray-600">
                       <MapPin className="w-5 h-5" />
                       <span>{trainer.location}</span>
                     </div>
@@ -229,41 +229,41 @@ const TrainerDetailModal: React.FC<TrainerDetailModalProps> = ({ isOpen, onClose
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Statistics</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3">Statistics</h3>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                    <div className="bg-blue-50 p-4 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <Star className="w-5 h-5 text-yellow-500" />
-                        <span className="text-sm text-gray-600 dark:text-gray-300">Rating</span>
+                        <span className="text-sm text-gray-600">Rating</span>
                       </div>
-                      <p className="text-2xl font-bold text-gray-800 dark:text-white">{trainer.rating}</p>
+                      <p className="text-2xl font-bold text-gray-800">{trainer.rating}</p>
                     </div>
-                    <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                    <div className="bg-green-50 p-4 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <Users className="w-5 h-5 text-green-500" />
-                        <span className="text-sm text-gray-600 dark:text-gray-300">Students</span>
+                        <span className="text-sm text-gray-600">Students</span>
                       </div>
-                      <p className="text-2xl font-bold text-gray-800 dark:text-white">{trainer.totalStudents}</p>
+                      <p className="text-2xl font-bold text-gray-800">{trainer.totalStudents}</p>
                     </div>
-                    <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                    <div className="bg-purple-50 p-4 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <BookOpen className="w-5 h-5 text-purple-500" />
-                        <span className="text-sm text-gray-600 dark:text-gray-300">Courses</span>
+                        <span className="text-sm text-gray-600">Courses</span>
                       </div>
-                      <p className="text-2xl font-bold text-gray-800 dark:text-white">{trainer.totalCourses}</p>
+                      <p className="text-2xl font-bold text-gray-800">{trainer.totalCourses}</p>
                     </div>
-                    <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
+                    <div className="bg-orange-50 p-4 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <Calendar className="w-5 h-5 text-orange-500" />
-                        <span className="text-sm text-gray-600 dark:text-gray-300">Experience</span>
+                        <span className="text-sm text-gray-600">Experience</span>
                       </div>
-                      <p className="text-lg font-bold text-gray-800 dark:text-white">{trainer.experience}</p>
+                      <p className="text-lg font-bold text-gray-800">{trainer.experience}</p>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Specializations</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3">Specializations</h3>
                   <div className="flex flex-wrap gap-2">
                     {trainer.specializations.map((spec, index) => (
                       <span
@@ -280,24 +280,24 @@ const TrainerDetailModal: React.FC<TrainerDetailModalProps> = ({ isOpen, onClose
               {/* Right Column */}
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Biography</h3>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{trainer.bio}</p>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3">Biography</h3>
+                  <p className="text-gray-600 leading-relaxed">{trainer.bio}</p>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Certifications</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3">Certifications</h3>
                   <div className="space-y-2">
                     {trainer.certifications.map((cert, index) => (
                       <div key={index} className="flex items-center space-x-2">
                         <Award className="w-4 h-4 text-green-500" />
-                        <span className="text-gray-600 dark:text-gray-300">{cert}</span>
+                        <span className="text-gray-600">{cert}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Languages</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3">Languages</h3>
                   <div className="flex flex-wrap gap-2">
                     {trainer.languages.map((lang, index) => (
                       <span
@@ -311,18 +311,18 @@ const TrainerDetailModal: React.FC<TrainerDetailModalProps> = ({ isOpen, onClose
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Professional Details</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3">Professional Details</h3>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">Hourly Rate:</span>
-                      <span className="font-semibold text-gray-800 dark:text-white">{trainer.hourlyRate}</span>
+                      <span className="text-gray-600">Hourly Rate:</span>
+                      <span className="font-semibold text-gray-800">{trainer.hourlyRate}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">Availability:</span>
-                      <span className="font-semibold text-gray-800 dark:text-white">{trainer.availability}</span>
+                      <span className="text-gray-600">Availability:</span>
+                      <span className="font-semibold text-gray-800">{trainer.availability}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">Status:</span>
+                      <span className="text-gray-600">Status:</span>
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold ${trainer.status === 'active' ? 'bg-green-100 text-green-800' :
                           trainer.status === 'inactive' ? 'bg-red-100 text-red-800' :
                             'bg-yellow-100 text-yellow-800'
@@ -501,30 +501,30 @@ const ListTrainer: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-300">Loading trainers...</p>
+          <p className="text-gray-600">Loading trainers...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
       <Alert {...alert} onClose={() => setAlert(prev => ({ ...prev, isVisible: false }))} />
 
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl mb-6">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="bg-white rounded-2xl shadow-xl mb-6">
+          <div className="p-6 border-b border-gray-200">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">Trainers</h1>
-                <p className="text-gray-600 dark:text-gray-300 mt-1">Manage your training team</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Trainers</h1>
+                <p className="text-gray-600 mt-1">Manage your training team</p>
               </div>
               <div className="flex items-center space-x-3">
-                <button className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center">
+                <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center">
                   <Download className="w-4 h-4 mr-2" />
                   Export
                 </button>
@@ -549,7 +549,7 @@ const ListTrainer: React.FC = () => {
                   placeholder="Search trainers..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 transition-colors"
                 />
               </div>
               <div className="relative">
@@ -557,7 +557,7 @@ const ListTrainer: React.FC = () => {
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value as "all" | "active" | "inactive" | "pending")}
-                  className="pl-10 pr-8 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors appearance-none min-w-[150px]"
+                  className="pl-10 pr-8 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 transition-colors appearance-none min-w-[150px]"
                 >
                   <option value="all">All Status</option>
                   <option value="active">Active</option>
@@ -576,14 +576,14 @@ const ListTrainer: React.FC = () => {
               key={trainer.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+              className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(trainer.status)}`}>
                     {trainer.status.charAt(0).toUpperCase() + trainer.status.slice(1)}
                   </span>
-                  <span className="text-sm font-semibold text-gray-800 dark:text-white">{trainer.hourlyRate}</span>
+                  <span className="text-sm font-semibold text-gray-800">{trainer.hourlyRate}</span>
                 </div>
 
                 <div className="flex space-x-2">
@@ -615,10 +615,10 @@ const ListTrainer: React.FC = () => {
 
         {/* Empty State */}
         {paginatedTrainers.length === 0 && (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-12 text-center">
+          <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
             <User className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">No trainers found</h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">No trainers found</h3>
+            <p className="text-gray-600 mb-6">
               {searchTerm || filterStatus !== 'all'
                 ? 'Try adjusting your search or filter criteria.'
                 : 'Get started by adding your first trainer.'
@@ -633,16 +633,16 @@ const ListTrainer: React.FC = () => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+          <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-600 dark:text-gray-300">
+              <div className="text-sm text-gray-600">
                 Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredTrainers.length)} of {filteredTrainers.length} trainers
               </div>
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="p-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
@@ -653,7 +653,7 @@ const ListTrainer: React.FC = () => {
                     onClick={() => setCurrentPage(page)}
                     className={`px-3 py-2 rounded-lg transition-colors ${currentPage === page
                         ? 'bg-blue-600 text-white'
-                        : 'border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+                        : 'border border-gray-300 hover:bg-gray-50 text-gray-700'
                       }`}
                   >
                     {page}
@@ -663,7 +663,7 @@ const ListTrainer: React.FC = () => {
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="p-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>

@@ -830,30 +830,30 @@ const CourseList: React.FC = () => {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className=" border-b">
+              <thead className="border-b bg-white">
                 <tr>
                   {visibleColumns.courseTitle && (
-                    <th className="px-6 py-4 text-left" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>Course Title:</th>
+                    <th className="px-6 py-4 text-left text-[#2c3e50]" style={{ fontSize: 15, fontWeight: 600 }}>Course Title:</th>
                   )}
                   {visibleColumns.students && (
-                    <th className="px-6 py-4 text-left" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>Students:</th>
+                    <th className="px-6 py-4 text-left text-[#2c3e50]" style={{ fontSize: 15, fontWeight: 600 }}>Students:</th>
                   )}
                   {visibleColumns.price && (
-                    <th className="px-6 py-4 text-left" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>Price:</th>
+                    <th className="px-6 py-4 text-left text-[#2c3e50]" style={{ fontSize: 15, fontWeight: 600 }}>Price:</th>
                   )}
                   {visibleColumns.status && (
-                    <th className="px-6 py-4 text-left" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>Status:</th>
+                    <th className="px-6 py-4 text-left text-[#2c3e50]" style={{ fontSize: 15, fontWeight: 600 }}>Status:</th>
                   )}
                   {visibleColumns.dateCreated && (
-                    <th className="px-6 py-4 text-left" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>Date created:</th>
+                    <th className="px-6 py-4 text-left text-[#2c3e50]" style={{ fontSize: 15, fontWeight: 600 }}>Date created:</th>
                   )}
                   {visibleColumns.category && (
-                    <th className="px-6 py-4 text-left" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>Category:</th>
+                    <th className="px-6 py-4 text-left text-[#2c3e50]" style={{ fontSize: 15, fontWeight: 600 }}>Category:</th>
                   )}
-                  <th className="px-6 py-4 text-left" style={{ fontSize: 15, fontWeight: 600, color: "#2c3e50" }}>Actions:</th>
+                  <th className="px-6 py-4 text-left text-[#2c3e50]" style={{ fontSize: 15, fontWeight: 600 }}>Actions:</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-[#1f2937]">
                 {filteredCourses.map((course, index) => (
                   <tr key={course.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                     {visibleColumns.courseTitle && (
