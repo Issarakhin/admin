@@ -32,3 +32,42 @@ p, li, a, button {
   font-family: 'Nunito', sans-serif;
   font-weight: 400; /* Normal weight, adjust as needed */
 }
+
+/* Global scrollbar refresh */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #a5b3c2 #f2f5f8;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f2f5f8;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #b3beca, #90a1b4);
+  border-radius: 999px;
+  border: 1px solid #f2f5f8;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #9dabb9, #788ea5);
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ffb786, #f7904f);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sidebar-scroll {
+  scrollbar-color: #f7904f rgba(255, 255, 255, 0.08);
+}

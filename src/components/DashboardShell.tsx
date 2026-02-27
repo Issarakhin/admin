@@ -100,17 +100,38 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
   };
 
   return (
-    <aside className={`h-full bg-white shadow-lg transition-all duration-300 ease-in-out ${isCollapsed ? "w-20" : "w-64"} flex flex-col`}>
-      <div className="flex items-center justify-between px-4 bg-[#2c3e50]" style={{ paddingTop: 8, paddingBottom: 8, borderBottomWidth: 1, borderColor: "#34495e" }}>
+    <aside
+      className={`relative h-full border-r border-[#0f2740] shadow-[0_20px_45px_rgba(8,22,38,0.35)] transition-all duration-300 ease-in-out ${
+        isCollapsed ? "w-20" : "w-72"
+      } flex flex-col overflow-hidden bg-gradient-to-b from-[#0f2438] via-[#14314a] to-[#0f2438]`}
+    >
+      <div className="pointer-events-none absolute inset-0 opacity-50">
+        <div className="absolute -left-16 top-20 h-44 w-44 rounded-full bg-[#2eaadc]/20 blur-3xl" />
+        <div className="absolute -right-16 bottom-14 h-52 w-52 rounded-full bg-[#f78c45]/15 blur-3xl" />
+      </div>
+
+      <div
+        className="relative z-10 flex items-center justify-between px-5"
+        style={{ paddingTop: 14, paddingBottom: 14, borderBottomWidth: 1, borderColor: "#2c4863" }}
+      >
         <Link href="/overview" passHref>
           <div className={`flex items-center space-x-3 ${isCollapsed ? "justify-center w-full" : ""}`}>
-            <Image src={DGLOGO} width={40} height={40} alt="DGLOGO" style={{ borderRadius: 5 }} />
-            {!isCollapsed && <span className="text-[#fff]" style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>Admin Dashboard</span>}
+            <Image src={DGLOGO} width={40} height={40} alt="DGLOGO" style={{ borderRadius: 10 }} />
+            {!isCollapsed && (
+              <span className="text-[#fff]" style={{ fontSize: 16, fontWeight: 700, color: "#fff", letterSpacing: 0.4 }}>
+                Admin Dashboard
+              </span>
+            )}
           </div>
         </Link>
       </div>
 
-      <nav className="flex-1 py-0 overflow-y-auto" style={{ backgroundColor: "#2c3e50" }}>
+      <nav className="sidebar-scroll relative z-10 flex-1 py-4 overflow-y-auto">
+        {!isCollapsed && (
+          <p className="px-5 pb-2 text-[11px] uppercase tracking-[0.18em] text-[#9bb4cc]">
+            Navigation
+          </p>
+        )}
         {menuItems.map((item) => {
           const hasActiveSubItem =
             item.subItems?.some((subItem) => subItem.id === currentSection) ??
@@ -122,9 +143,11 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
               {item.subItems ? (
                 <button
                   onClick={() => toggleExpand(item.id)}
-                  style={{ fontSize: 14, fontWeight: 600, borderRadius: 15, color: "#fff" }}
-                  className={`w-full flex items-center justify-between px-4 py-2 my-1 transition-all duration-200 ${
-                    isActiveItem ? "bg-[#F87E38] shadow-lg text-white" : "text-white hover:bg-[#F87E38]"
+                  style={{ fontSize: 14, fontWeight: 600, borderRadius: 12, color: "#fff" }}
+                  className={`w-full border flex items-center justify-between px-4 py-2.5 my-1.5 transition-all duration-200 ${
+                    isActiveItem
+                      ? "bg-gradient-to-r from-[#ff9d58] to-[#f87e38] border-[#ffb07a] shadow-md shadow-orange-400/25 text-white"
+                      : "border-transparent text-[#e6edf5] hover:bg-white/10 hover:border-[#ffffff1f] hover:text-white"
                   } ${isCollapsed ? "justify-center" : ""}`}
                 >
                   <div className="flex items-center space-x-3">
@@ -138,9 +161,11 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
               ) : (
                 <Link
                   href={item.path ?? `/${item.id}`}
-                  style={{ fontSize: 14, fontWeight: 600, borderRadius: 15, color: "#fff" }}
-                  className={`w-full flex items-center px-4 py-2 my-1 transition-all duration-200 ${
-                    isActiveItem ? "bg-[#F87E38] shadow-lg text-white" : "text-white hover:bg-[#F87E38]"
+                  style={{ fontSize: 14, fontWeight: 600, borderRadius: 12, color: "#fff" }}
+                  className={`w-full border flex items-center px-4 py-2.5 my-1.5 transition-all duration-200 ${
+                    isActiveItem
+                      ? "bg-gradient-to-r from-[#ff9d58] to-[#f87e38] border-[#ffb07a] shadow-md shadow-orange-400/25 text-white"
+                      : "border-transparent text-[#e6edf5] hover:bg-white/10 hover:border-[#ffffff1f] hover:text-white"
                   } ${isCollapsed ? "justify-center" : ""}`}
                 >
                   <div className="flex items-center space-x-3">
@@ -156,18 +181,20 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
                     initial="hidden"
                     animate="visible"
                     exit="hidden"
-                    className="pl-8 py-1 space-y-1"
+                    className="pl-7 py-1 space-y-1"
                   >
                     {item.subItems?.map((subItem) => (
                       <Link
                         key={subItem.id}
                         href={subItem.path ?? `/${subItem.id}`}
-                        style={{ fontSize: 12, fontWeight: 400 }}
-                        className={`block w-full text-left px-4 py-2 text-sm rounded-md transition-all duration-200 relative ${
-                          currentSection === subItem.id ? "text-[#F87E38]" : "text-[#d7deea] hover:text-[#F87E38]"
+                        style={{ fontSize: 12, fontWeight: 500 }}
+                        className={`block w-full text-left px-4 py-2 text-sm rounded-lg transition-all duration-200 relative ${
+                          currentSection === subItem.id
+                            ? "text-[#ffd0a8] bg-white/10"
+                            : "text-[#bed0e2] hover:text-[#ffd0a8] hover:bg-white/5"
                         }`}
                       >
-                        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-1 bg-[#F87E38] rounded-r-full opacity-0 transition-opacity" style={{ opacity: currentSection === subItem.id ? 1 : 0 }} />
+                        <span className="absolute left-1 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-[#ffb680] opacity-0 transition-opacity" style={{ opacity: currentSection === subItem.id ? 1 : 0 }} />
                         {subItem.label}
                       </Link>
                     ))}
@@ -180,11 +207,11 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
       </nav>
 
       {!isCollapsed && (
-        <div className="px-4 py-4 bg-[#2c3e50] border-t border-[#34495e]">
+        <div className="relative z-10 px-4 py-4 border-t border-[#2c4863] bg-[#10263b]/65 backdrop-blur">
           <div className="text-center space-y-1">
-            <p className="text-xs text-gray-300" style={{ fontWeight: 400, fontSize: 12 }}>Terms & Conditions</p>
-            <p className="text-xs text-gray-300" style={{ fontWeight: 400, fontSize: 12 }}>Version 1.0.0</p>
-            <p className="text-xs text-gray-300" style={{ fontWeight: 400, fontSize: 12 }}>© {currentYear} All Rights Reserved by DGNext</p>
+            <p className="text-xs text-[#bfd0e1]" style={{ fontWeight: 500, fontSize: 12 }}>Terms & Conditions</p>
+            <p className="text-xs text-[#9eb6cc]" style={{ fontWeight: 400, fontSize: 12 }}>Version 1.0.0</p>
+            <p className="text-xs text-[#9eb6cc]" style={{ fontWeight: 400, fontSize: 12 }}>© {currentYear} All Rights Reserved by DGNext</p>
           </div>
         </div>
       )}
