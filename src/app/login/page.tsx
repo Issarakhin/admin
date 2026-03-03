@@ -12,6 +12,7 @@ import BGAnimation from "@/app/assets/animations/bg-style3.json";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import FloatingInput from "@/app/login/FloatingInput";
+import { fetchCsrfToken } from "@/lib/utils/csrf";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
@@ -46,9 +47,13 @@ export default function AuthPreview() {
     setModalConfig({ show: true, message: "Please Wait", type: "loading" });
 
     try {
+      const csrfToken = await fetchCsrfToken();
       const response = await fetch("/api/admin/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
+        },
         body: JSON.stringify({ password: loginData.password }),
       });
 

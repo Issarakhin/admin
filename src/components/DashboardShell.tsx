@@ -39,6 +39,7 @@ import {
 import ProfileAdminModal from "@/components/ProfileAdminModal";
 import DashboardAlertModal from "@/components/DashboardAlertModal";
 import { AdminData } from "@/components/dashboard-types";
+import { fetchCsrfToken } from "@/lib/utils/csrf";
 
 interface MenuItem {
   id: string;
@@ -381,7 +382,11 @@ export default function DashboardShell({
           toggleSidebar={() => setIsCollapsed((prev) => !prev)}
           isCollapsed={isCollapsed}
           onSignOut={async () => {
-            await fetch("/api/admin/logout", { method: "POST" });
+            const csrfToken = await fetchCsrfToken();
+            await fetch("/api/admin/logout", {
+              method: "POST",
+              headers: { "x-csrf-token": csrfToken },
+            });
           }}
         />
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 lg:p-8">

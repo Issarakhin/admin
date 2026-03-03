@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import {
+  ADMIN_SESSION_COOKIE,
+  verifyAdminSessionToken,
+} from "@/lib/utils/adminSession";
 
-const ADMIN_SESSION_COOKIE = "admin_session";
 const PUBLIC_ROUTES = ["/login", "/privacy", "/terms"];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const hasAdminSession = request.cookies.get(ADMIN_SESSION_COOKIE)?.value === "1";
+  const sessionToken = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET?.trim();
+  const hasAdminSession =
+    Boolean(sessionToken) &&
+    Boolean(sessionSecret) &&
+    (await verifyAdminSessionToken(sessionToken as string, sessionSecret as string));
   const isPublicRoute = PUBLIC_ROUTES.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   );
