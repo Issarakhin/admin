@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 
 // Import images statically
 import moneyReceived from '@/app/assets/png/money-received.png';
-import students from '@/app/assets/png/students.png';
 import digitalLibrary from '@/app/assets/png/digital-library.png';
 import quiz from '@/app/assets/png/quiz.png';
 import certificate from '@/app/assets/png/certificate.png';
@@ -42,9 +41,9 @@ interface UserProgressDoc {
 }
 
 const DashboardOverview = () => {
-  const [totalStudents, setTotalStudents] = useState(0);
+  const [, setTotalStudents] = useState(0);
   const [coursesCount, setCoursesCount] = useState(0);
-  const [quizCount, setQuizCount] = useState(0);
+  const [, setQuizCount] = useState(0);
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [certificateCount, setCertificateCount] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
