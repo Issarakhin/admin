@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils/utils';
+import { fetchCsrfToken } from '@/lib/utils/csrf';
 import successAnimation from '@/app/assets/animations/success.json';
 import errorAnimation from '@/app/assets/animations/failed.json';
 import dynamic from 'next/dynamic';
@@ -117,6 +118,7 @@ const PushNotification = () => {
   };
 
   const sendPushNotification = async (token: string, img: string) => {
+    const csrfToken = await fetchCsrfToken();
     const msg: PushMessage = {
       to: token,
       sound: 'default',
@@ -132,7 +134,10 @@ const PushNotification = () => {
 
     const res = await fetch('/api/send-notification', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-csrf-token': csrfToken,
+      },
       body: JSON.stringify({ message: msg }),
     });
     if (!res.ok) throw new Error('FCM error');
