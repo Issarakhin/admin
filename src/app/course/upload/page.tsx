@@ -21,6 +21,7 @@ import Modal from '@/components/ui/Modals';
 import dynamic from 'next/dynamic';
 import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
+import Link from 'next/link';
 import successAnimation from '@/app/assets/animations/success.json';
 import failureAnimation from '@/app/assets/animations/failed.json';
 
@@ -728,6 +729,16 @@ const UploadCourseForm: React.FC = () => {
 
   return (
     <div className="mx-auto p-10">
+      <div className="mb-4">
+        <Link href="/course">
+          <Button
+            type="button"
+            className="rounded-[15px] bg-[#E7E5E4] px-5 py-2.5 text-[15px] font-medium text-[#2c3e50] hover:bg-[#d6d3d1]"
+          >
+            Back
+          </Button>
+        </Link>
+      </div>
       <Card
         style={{
           boxShadow:

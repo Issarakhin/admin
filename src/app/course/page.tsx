@@ -21,6 +21,7 @@ import Modal from '@/components/ui/Modals';
 import dynamic from 'next/dynamic';
 import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
+import Link from 'next/link';
 import successAnimation from '@/app/assets/animations/success.json';
 import failureAnimation from '@/app/assets/animations/failed.json';
 import trashAnimation from "@/app/assets/animations/trash.json"
@@ -790,8 +791,17 @@ const CourseList: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-[#2c3e50]"></h1>
-        <div style={{ fontSize: 16, fontWeight: 600 }}>
-          {filteredCourses.length} / {courses.length} courses
+        <div className="flex items-center gap-3">
+          <Link
+            href="/course/upload"
+            className="inline-flex items-center rounded-[15px] bg-[#2c3e50] px-5 py-2.5 text-white"
+            style={{ fontSize: 15, fontWeight: 500 }}
+          >
+            Upload Course
+          </Link>
+          <div style={{ fontSize: 16, fontWeight: 600 }}>
+            {filteredCourses.length} / {courses.length} courses
+          </div>
         </div>
       </div>
 

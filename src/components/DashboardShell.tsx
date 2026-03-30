@@ -69,16 +69,7 @@ const submenuVariants = {
 
 const menuItems: MenuItem[] = [
   { id: "overview", icon: LayoutDashboard, label: "Overview", path: "/overview" },
-  {
-    id: "courses",
-    icon: BookOpen,
-    label: "Courses",
-    subItems: [
-      { id: "course-list", label: "Course List", path: "/course/course-list" },
-      { id: "add-course", label: "Upload Course", path: "/course/add-course" },
-      { id: "add-course-categories", label: "Upload Course Categories", path: "/course/add-course-categories" },
-    ],
-  },
+  { id: "course", icon: BookOpen, label: "Courses", path: "/course" },
   { id: "trainers", icon: UserRound, label: "Trainers", subItems: [{ id: "list-trainers", label: "List Trainers", path: "/trainers/list-trainers" }, { id: "add-trainer", label: "Add Trainer", path: "/trainers/add-trainer" }] },
   { id: "list-certificates", icon: FileText, label: "Certificates", path: "/certificates/list-certificates" },
   { id: "students", icon: Users, label: "Students", subItems: [{ id: "list-student", label: "List Students", path: "/students/list-student" }, { id: "student-enroll-recorded", label: "Enrollments", path: "/students/student-enroll-recorded" }] },
@@ -91,9 +82,7 @@ const menuItems: MenuItem[] = [
 ];
 
 const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
-  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
-    courses: true,
-  });
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   const currentYear = new Date().getFullYear();
 
   const toggleExpand = (id: string) => {
@@ -358,7 +347,8 @@ export default function DashboardShell({
 
   const currentSection = useMemo(() => {
     const segments = pathname.split("/").filter(Boolean);
-    return segments.length <= 1 ? "overview" : segments[segments.length - 1];
+    if (segments.length === 0) return "overview";
+    return segments[segments.length - 1];
   }, [pathname]);
 
   const pageTitle = useMemo(() => {
