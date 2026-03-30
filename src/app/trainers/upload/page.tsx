@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import {
   User,
   Mail,
@@ -379,6 +380,14 @@ const UploadTrainer: React.FC = () => {
       <Alert {...alert} onClose={() => setAlert((prev) => ({ ...prev, isVisible: false }))} />
 
       <div className="max-w-4xl mx-auto">
+        <div className="mb-4">
+          <Link
+            href="/trainers"
+            className="inline-flex items-center rounded-[15px] bg-[#E7E5E4] px-5 py-2.5 text-[15px] font-medium text-[#2c3e50] hover:bg-[#d6d3d1]"
+          >
+            Back
+          </Link>
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

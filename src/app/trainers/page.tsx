@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   Search,
   Filter,
@@ -524,6 +525,13 @@ const ListTrainer: React.FC = () => {
                 <p className="text-gray-600 mt-1">Manage your training team</p>
               </div>
               <div className="flex items-center space-x-3">
+                <Link
+                  href="/trainers/upload"
+                  className="px-4 py-2 bg-[#2c3e50] text-white rounded-lg hover:bg-[#34495e] transition-colors flex items-center"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Upload Page
+                </Link>
                 <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center">
                   <Download className="w-4 h-4 mr-2" />
                   Export

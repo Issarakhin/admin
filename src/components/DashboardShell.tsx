@@ -70,7 +70,7 @@ const submenuVariants = {
 const menuItems: MenuItem[] = [
   { id: "overview", icon: LayoutDashboard, label: "Overview", path: "/overview" },
   { id: "course", icon: BookOpen, label: "Courses", path: "/course" },
-  { id: "trainers", icon: UserRound, label: "Trainers", subItems: [{ id: "list-trainers", label: "List Trainers", path: "/trainers/list-trainers" }, { id: "add-trainer", label: "Add Trainer", path: "/trainers/add-trainer" }] },
+  { id: "trainers", icon: UserRound, label: "Trainers", path: "/trainers" },
   { id: "list-certificates", icon: FileText, label: "Certificates", path: "/certificates/list-certificates" },
   { id: "students", icon: Users, label: "Students", subItems: [{ id: "list-student", label: "List Students", path: "/students/list-student" }, { id: "student-enroll-recorded", label: "Enrollments", path: "/students/student-enroll-recorded" }] },
   { id: "blogposts", icon: Pen, label: "Blog Posts", subItems: [{ id: "add-blogpost", label: "Upload Post", path: "/blogposts/add-blogpost" }, { id: "list-blogpost", label: "List Posts", path: "/blogposts/list-blogpost" }] },
