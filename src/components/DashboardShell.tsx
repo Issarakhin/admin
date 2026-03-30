@@ -75,7 +75,7 @@ const menuItems: MenuItem[] = [
   { id: "students", icon: Users, label: "Students", subItems: [{ id: "list-student", label: "List Students", path: "/students/list-student" }, { id: "student-enroll-recorded", label: "Enrollments", path: "/students/student-enroll-recorded" }] },
   { id: "blogposts", icon: Pen, label: "Blog Posts", path: "/blogposts" },
   { id: "events", icon: Calendar, label: "Events", path: "/events" },
-  { id: "notifications", icon: Bell, label: "Notifications", subItems: [{ id: "list-notification", label: "List Notifications", path: "/notifications/list-notification" }, { id: "add-push-notification", label: "Add Push Notification", path: "/notifications/add-push-notification" }] },
+  { id: "notifications", icon: Bell, label: "Notifications", path: "/notifications" },
   { id: "discounts", icon: Megaphone, label: "Marketing", path: "/marketing/discounts" },
   { id: "course-sales", icon: DollarSign, label: "Payments", path: "/payment/course-sales" },
   { id: "support-tickets", icon: HelpCircle, label: "Support", path: "/support/support-tickets" },

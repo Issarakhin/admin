@@ -6,6 +6,7 @@ import { collection, query, orderBy, where, onSnapshot, Timestamp } from 'fireba
 import { db } from '@/lib/config/firebase';
 import { Button } from '@/components/ui/button'; // Assuming you have a Button component
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Notification {
   id: string;
@@ -180,6 +181,16 @@ const ListNotification = () => {
       borderRadius: 15,
       paddingTop: 40
     }}>
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold text-[#2c3e50]">Notifications</h1>
+        <Link
+          href="/notifications/upload"
+          className="rounded-md bg-[#2c3e50] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1e2a37]"
+        >
+          Add Notification
+        </Link>
+      </div>
+
       <div className="relative mb-4" >
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}

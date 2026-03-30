@@ -19,6 +19,7 @@ import errorAnimation from '@/app/assets/animations/failed.json';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Imagedefault from "@/app/assets/png/image-gallery.png"
+import Link from 'next/link';
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
@@ -274,6 +275,15 @@ const PushNotification = () => {
     <>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 p-4">
         <div className="max-w-6xl mx-auto">
+          <div className="mb-4">
+            <Link
+              href="/notifications"
+              className="rounded-md border border-[#2c3e50] px-4 py-2 text-sm font-medium text-[#2c3e50] transition-colors hover:bg-[#2c3e50] hover:text-white"
+            >
+              Back
+            </Link>
+          </div>
+
           <Card className=" bg-white/80 border-0" style={{ paddingRight: 20, paddingLeft: 20, paddingTop: 50, paddingBottom: 30, borderRadius: 25 }}>
             <CardContent className="p-8">
               <form onSubmit={handleSubmit} className="space-y-8">
