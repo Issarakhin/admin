@@ -20,6 +20,7 @@ import successAnimation from '@/app/assets/animations/success.json'; // Path to 
 import errorAnimation from '@/app/assets/animations/failed.json'; // Path to error Lottie animation
 import dynamic from 'next/dynamic';
 import Imagegallerylogo from "@/app/assets/png/image-gallery.png"
+import Link from 'next/link';
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
@@ -109,7 +110,16 @@ const UploadEvent = () => {
     };
 
     return (
-        <div className="flex gap-6 p-10">
+        <>
+            <div className="px-10 pt-10">
+                <Link
+                    href="/events"
+                    className="rounded-md border border-[#2c3e50] px-4 py-2 text-sm font-medium text-[#2c3e50] transition-colors hover:bg-[#2c3e50] hover:text-white"
+                >
+                    Back
+                </Link>
+            </div>
+            <div className="flex gap-6 p-10 pt-4">
             <Card className="p-6 w-1/2" style={{
                 borderColor: "#fff", boxShadow: "0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)",
                 borderRadius: 15,
@@ -261,7 +271,8 @@ const UploadEvent = () => {
                     </div>
                 </div>
             </Modal>
-        </div>
+            </div>
+        </>
     );
 };
 

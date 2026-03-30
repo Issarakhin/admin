@@ -23,6 +23,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 import deleteAnimation from '@/app/assets/animations/trash.json'; // Update with the correct path to your Lottie JSON file
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
@@ -265,6 +266,16 @@ const ListEvent = () => {
                 borderRadius: 15,
                 paddingTop: 20
             }}>
+                <div className="mb-4 flex items-center justify-between">
+                    <h1 className="text-2xl font-semibold text-[#2c3e50]">Events</h1>
+                    <Link
+                        href="/events/upload"
+                        className="rounded-md bg-[#2c3e50] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1e2a37]"
+                    >
+                        Add Event
+                    </Link>
+                </div>
+
                 <Table>
                     <TableHeader>
                         <TableRow>
