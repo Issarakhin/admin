@@ -530,7 +530,7 @@ const ListTrainer: React.FC = () => {
                   className="px-4 py-2 bg-[#2c3e50] text-white rounded-lg hover:bg-[#34495e] transition-colors flex items-center"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Upload Page
+                  Add Trainer
                 </Link>
                 <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center">
                   <Download className="w-4 h-4 mr-2" />

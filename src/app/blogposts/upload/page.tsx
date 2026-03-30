@@ -7,7 +7,8 @@ import SuccessLotie from '@/app/assets/animations/success.json';
 import FailedLotie from '@/app/assets/animations/failed.json';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Pencil, Link, FileText, Video, Type, Link2, File, List, Trash2 } from 'lucide-react';
+import { Pencil, Link as LinkIcon, FileText, Video, Type, Link2, File, List, Trash2 } from 'lucide-react';
+import Link from 'next/link';
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
@@ -123,6 +124,15 @@ export default function BlogPostForm() {
 
   return (
     <>
+      <div className="mx-auto mb-4 flex max-w-2xl justify-start">
+        <Link
+          href="/blogposts"
+          className="rounded-md border border-[#2c3e50] px-4 py-2 text-sm font-medium text-[#2c3e50] transition-colors hover:bg-[#2c3e50] hover:text-white"
+        >
+          Back
+        </Link>
+      </div>
+
       <form
         onSubmit={handleSubmit}
         className="max-w-2xl mx-auto p-4 space-y-4"
@@ -328,7 +338,7 @@ export default function BlogPostForm() {
               className="px-4 py-2 text-[#2c3e50] flex items-center"
               style={{ borderRadius: 10, backgroundColor: 'transparent', border: '1px solid #2c3e50', height: '40px' } as React.CSSProperties}
             >
-              <Link size={18} className="mr-2" /> Add Image By URL
+              <LinkIcon size={18} className="mr-2" /> Add Image By URL
             </button>
             <button
               type="button"

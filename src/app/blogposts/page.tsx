@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Pencil, Trash2 } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import successAnimation from '@/app/assets/animations/success.json';
 import failureAnimation from '@/app/assets/animations/failed.json';
 import dynamic from 'next/dynamic';
@@ -355,6 +356,18 @@ const BlogList: React.FC = () => {
       borderRadius: 15,
       paddingTop: 20
     }}>
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold text-[#2c3e50]" style={{ fontFamily: "'Barlow', sans-serif" }}>
+          Blog Posts
+        </h1>
+        <Link
+          href="/blogposts/upload"
+          className="rounded-md bg-[#2c3e50] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1e2a37]"
+        >
+          Add Post
+        </Link>
+      </div>
+
       <Table>
         <TableHeader>
           <TableRow>
