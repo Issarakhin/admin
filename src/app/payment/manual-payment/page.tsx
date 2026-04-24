@@ -50,8 +50,6 @@ interface ManualPaymentRecord {
   username: string;
   email: string;
   amount: string;
-  transactionId: string;
-  telegramAccount: string;
   status: ReviewStatus;
   submittedAt: string;
   sortAt: number;
@@ -141,8 +139,6 @@ export default function ManualPaymentPage() {
           username?: string;
           email?: string;
           amount?: string | number;
-          transactionId?: string;
-          telegramAccount?: string;
           status?: string;
           createdAt?: Timestamp | string;
         };
@@ -157,8 +153,6 @@ export default function ManualPaymentPage() {
           username: data.username || "-",
           email: data.email || "-",
           amount: formatAmount(data.amount),
-          transactionId: data.transactionId || "-",
-          telegramAccount: data.telegramAccount || "@seakyarith",
           status,
           submittedAt: formatDate(data.createdAt),
           sortAt: toSortTime(data.createdAt),
@@ -255,7 +249,6 @@ export default function ManualPaymentPage() {
       total: priceNum,
       status: "completed",
       paymentMethod: "Manual",
-      transactionId: record.transactionId !== "-" ? record.transactionId : "",
     };
 
     let nextEnrollments: EnrollmentRecord[];
@@ -345,8 +338,6 @@ export default function ManualPaymentPage() {
                 <th className="px-4 py-3">Learner</th>
                 <th className="px-4 py-3">Course</th>
                 <th className="px-4 py-3">Amount</th>
-                <th className="px-4 py-3">Transaction</th>
-                <th className="px-4 py-3">Telegram</th>
                 <th className="px-4 py-3">Status</th>
                 <th className="px-4 py-3">Submitted</th>
                 <th className="px-4 py-3">Action</th>
@@ -355,13 +346,13 @@ export default function ManualPaymentPage() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td className="px-4 py-6 text-center text-gray-500" colSpan={9}>
+                  <td className="px-4 py-6 text-center text-gray-500" colSpan={7}>
                     Loading manual payments...
                   </td>
                 </tr>
               ) : rows.length === 0 ? (
                 <tr>
-                  <td className="px-4 py-6 text-center text-gray-500" colSpan={9}>
+                  <td className="px-4 py-6 text-center text-gray-500" colSpan={7}>
                     No manual payment requests found.
                   </td>
                 </tr>
@@ -380,8 +371,6 @@ export default function ManualPaymentPage() {
                       </td>
                       <td className="px-4 py-3">{item.courseTitle}</td>
                       <td className="px-4 py-3">{item.amount}</td>
-                      <td className="px-4 py-3">{item.transactionId}</td>
-                      <td className="px-4 py-3">{item.telegramAccount}</td>
                       <td className="px-4 py-3">
                         <span
                           className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${statusStyles[statusLabel] || "bg-gray-100 text-gray-700"}`}
