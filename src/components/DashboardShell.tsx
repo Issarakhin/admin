@@ -77,7 +77,15 @@ const menuItems: MenuItem[] = [
   { id: "events", icon: Calendar, label: "Events", path: "/events" },
   { id: "notifications", icon: Bell, label: "Notifications", path: "/notifications" },
   { id: "discounts", icon: Megaphone, label: "Marketing", path: "/marketing/discounts" },
-  { id: "course-sales", icon: DollarSign, label: "Payments", path: "/payment/course-sales" },
+  {
+    id: "payment",
+    icon: DollarSign,
+    label: "Payments",
+    subItems: [
+      { id: "aba-payment", label: "ABA Payment", path: "/payment/aba-payment" },
+      { id: "manual-payment", label: "Manual Payment", path: "/payment/manual-payment" },
+    ],
+  },
   { id: "support-tickets", icon: HelpCircle, label: "Support", path: "/support/support-tickets" },
 ];
 
