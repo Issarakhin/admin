@@ -70,13 +70,6 @@ const submenuVariants = {
 const menuItems: MenuItem[] = [
   { id: "overview", icon: LayoutDashboard, label: "Overview", path: "/overview" },
   { id: "course", icon: BookOpen, label: "Courses", path: "/course" },
-  { id: "trainers", icon: UserRound, label: "Trainers", path: "/trainers" },
-  { id: "list-certificates", icon: FileText, label: "Certificates", path: "/certificates/list-certificates" },
-  { id: "students", icon: Users, label: "Students", subItems: [{ id: "list-student", label: "List Students", path: "/students/list-student" }, { id: "student-enroll-recorded", label: "Enrollments", path: "/students/student-enroll-recorded" }] },
-  { id: "blogposts", icon: Pen, label: "Blog Posts", path: "/blogposts" },
-  { id: "events", icon: Calendar, label: "Events", path: "/events" },
-  { id: "notifications", icon: Bell, label: "Notifications", path: "/notifications" },
-  { id: "discounts", icon: Megaphone, label: "Marketing", path: "/marketing/discounts" },
   {
     id: "payment",
     icon: DollarSign,
@@ -86,6 +79,13 @@ const menuItems: MenuItem[] = [
       { id: "manual-payment", label: "Manual Payment", path: "/payment/manual-payment" },
     ],
   },
+  { id: "trainers", icon: UserRound, label: "Trainers", path: "/trainers" },
+  { id: "list-certificates", icon: FileText, label: "Certificates", path: "/certificates/list-certificates" },
+  { id: "students", icon: Users, label: "Students", subItems: [{ id: "list-student", label: "List Students", path: "/students/list-student" }, { id: "student-enroll-recorded", label: "Enrollments", path: "/students/student-enroll-recorded" }] },
+  { id: "blogposts", icon: Pen, label: "Blog Posts", path: "/blogposts" },
+  { id: "events", icon: Calendar, label: "Events", path: "/events" },
+  { id: "notifications", icon: Bell, label: "Notifications", path: "/notifications" },
+  { id: "discounts", icon: Megaphone, label: "Marketing", path: "/marketing/discounts" },
   { id: "support-tickets", icon: HelpCircle, label: "Support", path: "/support/support-tickets" },
 ];
 
@@ -125,11 +125,6 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
       </div>
 
       <nav className="sidebar-scroll relative z-10 flex-1 py-4 overflow-y-auto">
-        {!isCollapsed && (
-          <p className="px-5 pb-2 text-[11px] uppercase tracking-[0.18em] text-[#9bb4cc]">
-            Navigation
-          </p>
-        )}
         {menuItems.map((item) => {
           const hasActiveSubItem =
             item.subItems?.some((subItem) => subItem.id === currentSection) ??
@@ -389,16 +384,6 @@ export default function DashboardShell({
         />
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 lg:p-8">
           <div className="container mx-auto">
-            <div className="mb-8">
-              <h1 style={{ fontSize: 25, fontWeight: 800, color: "#2c3e50" }}>
-                {pageTitle}
-              </h1>
-              <p
-                style={{ fontSize: 16, fontWeight: 400, color: "#bdbdbd" }}
-              >
-                Welcome to your admin dashboard.
-              </p>
-            </div>
             <AnimatePresence mode="wait">
               <motion.div
                 key={pathname}
