@@ -9,6 +9,7 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  Menu,
   DollarSign,
   FileText,
   HelpCircle,
@@ -55,8 +56,10 @@ interface SidebarProps {
 }
 
 interface AdminHeaderProps {
-  toggleSidebar: () => void;
-  isCollapsed: boolean;
+  pageTitle: string;
+  onMobileMenuClick: () => void;
+  toggleDesktopSidebar: () => void;
+  isDesktopCollapsed: boolean;
   onSignOut: () => Promise<void>;
 }
 
@@ -143,8 +146,8 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
                       : "border-transparent text-[#e6edf5] hover:bg-white/10 hover:border-[#ffffff1f] hover:text-white"
                   } ${isCollapsed ? "justify-center" : ""}`}
                 >
-                  <div className="flex items-center space-x-3">
-                    <item.icon className="w-5 h-5" />
+                  <div className="flex min-w-0 items-center space-x-3">
+                    <item.icon className="h-5 w-5 shrink-0" />
                     {!isCollapsed && <span>{item.label}</span>}
                   </div>
                   {!isCollapsed && (
@@ -161,8 +164,8 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
                       : "border-transparent text-[#e6edf5] hover:bg-white/10 hover:border-[#ffffff1f] hover:text-white"
                   } ${isCollapsed ? "justify-center" : ""}`}
                 >
-                  <div className="flex items-center space-x-3">
-                    <item.icon className="w-5 h-5" />
+                  <div className="flex min-w-0 items-center space-x-3">
+                    <item.icon className="h-5 w-5 shrink-0" />
                     {!isCollapsed && <span>{item.label}</span>}
                   </div>
                 </Link>
@@ -212,7 +215,13 @@ const Sidebar = ({ currentSection, isCollapsed }: SidebarProps) => {
   );
 };
 
-const AdminHeader = ({ toggleSidebar, isCollapsed, onSignOut }: AdminHeaderProps) => {
+const AdminHeader = ({
+  pageTitle,
+  onMobileMenuClick,
+  toggleDesktopSidebar,
+  isDesktopCollapsed,
+  onSignOut,
+}: AdminHeaderProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState<boolean>(false);
@@ -267,11 +276,25 @@ const AdminHeader = ({ toggleSidebar, isCollapsed, onSignOut }: AdminHeaderProps
   };
 
   return (
-    <header style={{ paddingLeft: 20, paddingRight: 20 }} className="flex justify-between items-center p-2 bg-white text-black border-b border-gray-200 sticky top-0 z-40">
-      <div className="flex items-center space-x-4">
-        <button onClick={toggleSidebar} className="p-2 rounded-full hover:bg-gray-100 transition-colors md:hidden">
-          {isCollapsed ? <ChevronRight className="w-6 h-6" /> : <ChevronLeft className="w-6 h-6" />}
+    <header className="sticky top-0 z-40 flex min-h-16 items-center justify-between gap-3 border-b border-gray-200 bg-white px-3 py-2 text-black sm:px-5">
+      <div className="flex min-w-0 items-center gap-2 sm:gap-4">
+        <button
+          onClick={onMobileMenuClick}
+          aria-label="Open navigation menu"
+          className="rounded-full p-2 transition-colors hover:bg-gray-100 md:hidden"
+        >
+          <Menu className="h-6 w-6" />
         </button>
+        <button
+          onClick={toggleDesktopSidebar}
+          aria-label={isDesktopCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="hidden rounded-full p-2 transition-colors hover:bg-gray-100 md:inline-flex"
+        >
+          {isDesktopCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+        </button>
+        <h1 className="min-w-0 truncate text-base font-bold text-[#2c3e50] md:hidden">
+          {pageTitle}
+        </h1>
         <div className="relative hidden md:block">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
@@ -282,7 +305,7 @@ const AdminHeader = ({ toggleSidebar, isCollapsed, onSignOut }: AdminHeaderProps
           />
         </div>
       </div>
-      <div className="flex items-center space-x-4 sm:space-x-6">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-6">
         <button className="hover:bg-gray-100 p-2 rounded-full transition-colors relative">
           <Bell className="w-6 h-6 text-gray-600" />
           <span className="absolute w-6 h-6 bg-red-500 rounded-full border-2 border-white" style={{ marginTop: -33, fontSize: 14, color: "#fff", textAlign: "center", alignItems: "center" }}>0</span>
@@ -346,7 +369,8 @@ export default function DashboardShell({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   const currentSection = useMemo(() => {
     const segments = pathname.split("/").filter(Boolean);
@@ -360,20 +384,34 @@ export default function DashboardShell({
       .replace(/\b\w/g, (l) => l.toUpperCase());
   }, [currentSection]);
 
+  useEffect(() => {
+    setIsMobileSidebarOpen(false);
+  }, [pathname]);
+
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-dvh overflow-hidden bg-gray-50">
+      {isMobileSidebarOpen && (
+        <button
+          type="button"
+          aria-label="Close navigation menu"
+          className="fixed inset-0 z-40 bg-slate-950/45 backdrop-blur-[1px] md:hidden"
+          onClick={() => setIsMobileSidebarOpen(false)}
+        />
+      )}
       <div
-        className={`fixed inset-y-0 left-0 z-50 md:relative md:z-auto transform ${
-          isCollapsed ? "-translate-x-full" : "translate-x-0"
+        className={`fixed inset-y-0 left-0 z-50 transform md:relative md:z-auto ${
+          isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 transition-transform duration-300 ease-in-out`}
       >
-        <Sidebar currentSection={currentSection} isCollapsed={isCollapsed} />
+        <Sidebar currentSection={currentSection} isCollapsed={isDesktopCollapsed} />
       </div>
 
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <AdminHeader
-          toggleSidebar={() => setIsCollapsed((prev) => !prev)}
-          isCollapsed={isCollapsed}
+          pageTitle={pageTitle}
+          onMobileMenuClick={() => setIsMobileSidebarOpen(true)}
+          toggleDesktopSidebar={() => setIsDesktopCollapsed((prev) => !prev)}
+          isDesktopCollapsed={isDesktopCollapsed}
           onSignOut={async () => {
             const csrfToken = await fetchCsrfToken();
             await fetch("/api/admin/logout", {
@@ -382,8 +420,8 @@ export default function DashboardShell({
             });
           }}
         />
-        <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 lg:p-8">
-          <div className="container mx-auto">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto px-3 py-4 sm:px-5 sm:py-6 lg:p-8">
+          <div className="mx-auto w-full max-w-screen-2xl">
             <AnimatePresence mode="wait">
               <motion.div
                 key={pathname}

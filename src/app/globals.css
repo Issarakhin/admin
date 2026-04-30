@@ -17,6 +17,14 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Nunito', sans-serif;
+  overflow-x: hidden;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {

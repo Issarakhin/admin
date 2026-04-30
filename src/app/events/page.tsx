@@ -260,13 +260,13 @@ const ListEvent = () => {
     };
 
     return (
-        <div className="w-full p-10">
-            <div className='p-10' style={{
+        <div className="w-full p-0 sm:p-6 lg:p-10">
+            <div className='p-4 sm:p-6 lg:p-10' style={{
                 boxShadow: "0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)",
                 borderRadius: 15,
                 paddingTop: 20
             }}>
-                <div className="mb-4 flex items-center justify-between">
+                <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <h1 className="text-2xl font-semibold text-[#2c3e50]">Events</h1>
                     <Link
                         href="/events/upload"
@@ -276,6 +276,7 @@ const ListEvent = () => {
                     </Link>
                 </div>
 
+                <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -345,6 +346,7 @@ const ListEvent = () => {
                         ))}
                     </TableBody>
                 </Table>
+                </div>
 
                 <div className="flex justify-center items-center mt-6 gap-2">
                     <Button style={{ paddingBottom: 8, paddingTop: 8, paddingLeft: 15, paddingRight: 15, borderRadius: 15 }} onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} className="transition-all duration-300 ease-in-out transform hover:scale-105 bg-gray-200 hover:bg-gray-300 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">Previous</Button>

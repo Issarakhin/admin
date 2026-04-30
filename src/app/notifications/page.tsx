@@ -176,12 +176,12 @@ const ListNotification = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-10" style={{
+    <div className="mx-auto w-full max-w-4xl p-4 sm:p-6 lg:p-10" style={{
       boxShadow: "0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)",
       borderRadius: 15,
       paddingTop: 40
     }}>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-semibold text-[#2c3e50]">Notifications</h1>
         <Link
           href="/notifications/upload"
@@ -194,7 +194,7 @@ const ListNotification = () => {
       <div className="relative mb-4" >
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="flex items-center justify-between w-48 px-4 py-2 bg-white border"
+          className="flex w-full items-center justify-between border bg-white px-4 py-2 sm:w-48"
           style={{ borderRadius: 15, backgroundColor: "#fff", color: "#2c3e50", fontSize: 15, fontWeight: 400 }}
         >
           <span>{filterType}</span>
@@ -206,7 +206,7 @@ const ListNotification = () => {
         </button>
 
         {isDropdownOpen && (
-          <div className="absolute z-10 w-48 mt-1 bg-white border" style={{ borderRadius: 15, backgroundColor: "#fff", color: "#2c3e50" }}>
+          <div className="absolute z-10 mt-1 w-full border bg-white sm:w-48" style={{ borderRadius: 15, backgroundColor: "#fff", color: "#2c3e50" }}>
             {filterOptions.map((option) => (
               <button
                 key={option}
@@ -224,7 +224,7 @@ const ListNotification = () => {
         )}
       </div>
 
-      <div className="flex items-center mb-2 px-4 py-2 bg-gray-100" style={{ borderRadius: 15 }}>
+      <div className="mb-2 hidden items-center bg-gray-100 px-4 py-2 sm:flex" style={{ borderRadius: 15 }}>
         <div className="w-12"></div>
         <div className="flex items-center space-x-0 flex-1 font-medium">
           <span style={{ fontWeight: 600, fontSize: 16, color: "#2c3e50" }}>Message</span>
@@ -237,10 +237,10 @@ const ListNotification = () => {
           notifications.map((notification) => (
             <div
               key={notification.id}
-              className="flex items-center px-3 py-1 bg-white border hover:bg-gray-50"
+              className="flex flex-col gap-2 border bg-white px-3 py-3 hover:bg-gray-50 sm:flex-row sm:items-center sm:py-1"
               style={{ borderRadius: 15 }}
             >
-              <div className="w-12 h-12 flex items-center justify-center">
+              <div className="h-12 w-12 shrink-0 flex items-center justify-center">
                 {!imageError[notification.id] && notification.thumbnailUrl ? (
                   <Image
                     src={notification.thumbnailUrl}
@@ -257,11 +257,11 @@ const ListNotification = () => {
                 )}
               </div>
 
-              <div className="flex-1 ml-2">
+              <div className="min-w-0 flex-1 sm:ml-2">
                 <h3 className="font-medium">{notification.title}</h3>
-                <p className="text-sm text-gray-600">{notification.text}</p>
+                <p className="break-words text-sm text-gray-600">{notification.text}</p>
               </div>
-              <div className="w-32 text-right text-sm text-gray-500 mr-3">
+              <div className="w-full text-left text-sm text-gray-500 sm:mr-3 sm:w-32 sm:text-right">
                 {formatDate(notification.createdAt)}
               </div>
             </div>
@@ -272,7 +272,7 @@ const ListNotification = () => {
       </div>
 
       {/* Pagination Controls */}
-      <div className="flex justify-center items-center mt-6 gap-2">
+      <div className="flex flex-wrap justify-center items-center mt-6 gap-2">
         <Button
           style={{ paddingBottom: 8, paddingTop: 8, paddingLeft: 15, paddingRight: 15, borderRadius: 15 }}
           onClick={() => paginate(currentPage - 1)}
@@ -283,7 +283,7 @@ const ListNotification = () => {
           Previous
         </Button>
 
-        <div className="flex items-center space-x-1">
+        <div className="flex flex-wrap items-center justify-center gap-1">
           {renderPageNumbers()}
         </div>
 

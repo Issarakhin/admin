@@ -145,9 +145,9 @@ const ListStudent = () => {
   };
 
   return (
-    <div className="w-full p-10">
+    <div className="w-full p-0 sm:p-6 lg:p-10">
       <Card
-        className="w-full p-10 rounded-xl"
+        className="w-full rounded-xl p-3 sm:p-6 lg:p-10"
         style={{
           boxShadow:
             '0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)',
@@ -156,7 +156,8 @@ const ListStudent = () => {
           borderColor: '#fff',
         }}
       >
-        <CardContent>
+        <CardContent className="p-0 sm:p-6 sm:pt-0">
+          <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -223,7 +224,8 @@ const ListStudent = () => {
               ))}
             </TableBody>
           </Table>
-          <div className="flex justify-center items-center mt-6 gap-2">
+          </div>
+          <div className="flex flex-wrap justify-center items-center mt-6 gap-2">
             <Button
               style={{ paddingBottom: 8, paddingTop: 8, paddingLeft: 15, paddingRight: 15, borderRadius: 15 }}
               onClick={() => paginate(currentPage - 1)}
@@ -233,7 +235,7 @@ const ListStudent = () => {
             >
               Previous
             </Button>
-            <div className="flex items-center space-x-1">{renderPageNumbers()}</div>
+            <div className="flex flex-wrap items-center justify-center gap-1">{renderPageNumbers()}</div>
             <Button
               style={{ paddingBottom: 8, paddingTop: 8, paddingLeft: 15, paddingRight: 15, borderRadius: 15 }}
               onClick={() => paginate(currentPage + 1)}

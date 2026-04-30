@@ -426,9 +426,9 @@ const DashboardOverview = () => {
 
 
   return (
-    <div className="p-5 space-y-5">
+    <div className="space-y-5 p-0 sm:p-5">
       {/* Row 1 */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
         {/* Total Number */}
         <div
           className="bg-white p-6"
@@ -441,7 +441,7 @@ const DashboardOverview = () => {
           <h1 style={{ paddingBottom: 15, textAlign: 'center', color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>
             
           </h1>
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
             <div className="flex flex-col items-center justify-center space-y-2">
               <Image src={moneyReceived} width={50} height={50} alt="Money received icon" />
               <h3 style={{fontWeight: 400, fontSize: 14, color: "#6e737c"}}>Transactions</h3>
@@ -464,7 +464,7 @@ const DashboardOverview = () => {
           <h1 style={{ paddingBottom: 15, textAlign: 'center', color: '#2c3e50', fontSize: 16, fontWeight: 700 }}>
             CONTENT
           </h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
             <div className="flex flex-col items-center justify-center space-y-2">
               <Image src={digitalLibrary} width={50} height={50} alt="Digital library icon" />
               <span style={{fontWeight: 400, fontSize: 14, color: "#6e737c"}}>Courses</span>
@@ -503,7 +503,7 @@ const DashboardOverview = () => {
         </div>
       </div>
  {/* Row 3 - horizontal progress cards */}
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col gap-4 md:flex-row md:gap-6">
         {/* Completed */}
         <div
           className="flex-1 bg-white p-6 rounded-xl"
@@ -513,7 +513,7 @@ const DashboardOverview = () => {
             borderRadius: 15,
           }}
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center space-x-2">
               <Image src={healthy} width={25} height={25} alt="Healthy icon" />
               <h3
@@ -554,7 +554,7 @@ const DashboardOverview = () => {
             borderRadius: 15,
           }}
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center space-x-2">
               <Image src={processingTime} width={25} height={25} alt="Processing time icon" />
               <h3
@@ -595,7 +595,7 @@ const DashboardOverview = () => {
             borderRadius: 15,
           }}
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center space-x-2">
               <Image src={survey} width={35} height={35} alt="Survey icon" />
               <h3
@@ -637,7 +637,7 @@ const DashboardOverview = () => {
           borderRadius: 15,
         }}
       >
-        <div className="p-6">
+        <div className="p-0 sm:p-6">
           <h3
             className="text-gray-700 font-medium mb-4"
             style={{ textAlign: 'center', color: '#2c3e50', fontSize: 16, fontWeight: 700, marginTop: -10 }}
@@ -678,7 +678,7 @@ const DashboardOverview = () => {
               </tbody>
             </table>
           </div>
-          <div className="flex justify-center items-center mt-6 gap-2">
+          <div className="flex flex-wrap justify-center items-center mt-6 gap-2">
             <Button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
@@ -690,7 +690,7 @@ const DashboardOverview = () => {
             >
               Previous
             </Button>
-            <div className="flex items-center space-x-1">{renderPageNumbers()}</div>
+            <div className="flex flex-wrap items-center justify-center gap-1">{renderPageNumbers()}</div>
             <Button
               onClick={() => paginate(currentPage + 1)}
               disabled={currentPage === totalPages}

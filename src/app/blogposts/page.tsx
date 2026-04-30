@@ -351,12 +351,12 @@ const BlogList: React.FC = () => {
   }
 
   return (
-    <div className="w-full p-10 rounded-xl mt-10" style={{
+    <div className="mt-0 w-full rounded-xl p-4 sm:mt-6 sm:p-6 lg:mt-10 lg:p-10" style={{
       boxShadow: "0 -4px 6px rgba(196, 196, 196, 0.1), 4px 4px 10px rgba(182, 182, 182, 0.1), -4px 4px 10px rgba(226, 226, 226, 0.1), 0 4px 6px rgba(212, 212, 212, 0.1)",
       borderRadius: 15,
       paddingTop: 20
     }}>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-semibold text-[#2c3e50]" style={{ fontFamily: "'Barlow', sans-serif" }}>
           Blog Posts
         </h1>
@@ -368,6 +368,7 @@ const BlogList: React.FC = () => {
         </Link>
       </div>
 
+      <div className="overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -500,9 +501,10 @@ const BlogList: React.FC = () => {
           ))}
         </TableBody>
       </Table>
+      </div>
 
       {/* Pagination Controls */}
-      <div className="flex justify-center items-center mt-6 gap-2">
+      <div className="flex flex-wrap justify-center items-center mt-6 gap-2">
         <Button
           onClick={() => paginate(currentPage - 1)}
           disabled={currentPage === 1}
@@ -515,7 +517,7 @@ const BlogList: React.FC = () => {
           Previous
         </Button>
 
-        <div className="flex items-center space-x-1">
+        <div className="flex flex-wrap items-center justify-center gap-1">
           {renderPageNumbers()}
         </div>
 
