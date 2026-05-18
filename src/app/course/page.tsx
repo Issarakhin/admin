@@ -39,10 +39,12 @@ interface Question {
 interface Module {
   title: string;
   slidePdfUrl?: string;
+  slideText?: string;
   lessons: {
     title: string;
     videoUrl: string;
     pdfUrl?: string;
+    pdfText?: string;
     description: string;
     contentType?: 'video' | 'pdf';
   }[];
@@ -281,8 +283,65 @@ const CourseList: React.FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const isValidHttpsPdfUrl = (url: string) =>
-    /^https:\/\/.+\.pdf(?:[?#].*)?$/i.test(url.trim());
+  const isValidHttpsDocumentUrl = (url: string) =>
+    /^https:\/\/.+\.(pdf|pptx)(?:[?#].*)?$/i.test(url.trim());
+
+  const extractDocumentText = async (url?: string) => {
+    const trimmedUrl = url?.trim();
+
+    if (!trimmedUrl) {
+      return '';
+    }
+
+    try {
+      const response = await fetch('/api/extract-document-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: trimmedUrl }),
+      });
+      const data = (await response.json()) as { text?: string; error?: string };
+
+      if (!response.ok || data.error) {
+        console.warn('Document text extraction skipped:', data.error ?? response.statusText);
+        return '';
+      }
+
+      return data.text ?? '';
+    } catch (error) {
+      console.warn('Document text extraction failed:', error);
+      return '';
+    }
+  };
+
+  const withExtractedCourseDocuments = async (modules: CourseData['modules']) => {
+    const updatedModules: CourseData['modules'] = {};
+
+    for (const [moduleKey, module] of Object.entries(modules ?? {})) {
+      const slidePdfUrl = module.slidePdfUrl?.trim() ?? '';
+      const shouldRefreshSlideText = Boolean(slidePdfUrl) && !module.slideText;
+      const slideText = shouldRefreshSlideText ? await extractDocumentText(slidePdfUrl) : module.slideText ?? '';
+
+      updatedModules[moduleKey] = {
+        ...module,
+        slidePdfUrl,
+        slideText,
+        lessons: await Promise.all(
+          (module.lessons ?? []).map(async (lesson) => {
+            const pdfUrl = lesson.pdfUrl?.trim() ?? '';
+            const shouldRefreshPdfText = Boolean(pdfUrl) && !lesson.pdfText;
+
+            return {
+              ...lesson,
+              pdfUrl,
+              pdfText: shouldRefreshPdfText ? await extractDocumentText(pdfUrl) : lesson.pdfText ?? '',
+            };
+          }),
+        ),
+      };
+    }
+
+    return updatedModules;
+  };
 
   // Fetch courses and categories
   useEffect(() => {
@@ -524,6 +583,7 @@ const CourseList: React.FC = () => {
         [moduleKey]: {
           ...prevState?.modules[moduleKey],
           slidePdfUrl: value,
+          slideText: '',
         },
       },
     } as CourseData));
@@ -551,6 +611,7 @@ const CourseList: React.FC = () => {
       updatedModules[moduleKey].lessons[lessonIndex] = {
         ...updatedModules[moduleKey].lessons[lessonIndex],
         [field]: value,
+        ...(field === 'pdfUrl' ? { pdfText: '' } : {}),
       };
       return {
         ...prevState,
@@ -569,6 +630,7 @@ const CourseList: React.FC = () => {
         [moduleKey]: {
           title: '',
           slidePdfUrl: '',
+          slideText: '',
           lessons: [],
           quiz: {
             questions: Array(5).fill(null).map(() => ({
@@ -701,12 +763,12 @@ const CourseList: React.FC = () => {
 
     const invalidModuleSlide = Object.entries(editCourseData.modules || {}).find(([, module]) => {
       const slideUrl = module.slidePdfUrl?.trim();
-      return Boolean(slideUrl) && !isValidHttpsPdfUrl(slideUrl || '');
+      return Boolean(slideUrl) && !isValidHttpsDocumentUrl(slideUrl || '');
     });
 
     if (invalidModuleSlide) {
       const moduleLabel = invalidModuleSlide[0].replace(/^module/i, '') || invalidModuleSlide[0];
-      setErrorMessage(`Module ${moduleLabel} slide URL must be a valid HTTPS .pdf link.`);
+      setErrorMessage(`Module ${moduleLabel} slide URL must be a valid HTTPS .pdf or .pptx link.`);
       setIsErrorModalOpen(true);
       return;
     }
@@ -738,6 +800,7 @@ const CourseList: React.FC = () => {
 
       const updatedCourse = {
         ...editCourseData,
+        modules: await withExtractedCourseDocuments(editCourseData.modules),
         profileImg: profileImgUrl,
         thumbnail: thumbnailUrl,
         categories: selectedCategory,

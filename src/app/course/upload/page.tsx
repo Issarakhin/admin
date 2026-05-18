@@ -42,10 +42,12 @@ interface FirebaseError {
 interface Module {
   title: string;
   slidePdfUrl?: string;
+  slideText?: string;
   lessons: {
     title: string;
     videoUrl: string;
     pdfUrl?: string;
+    pdfText?: string;
     description: string;
     contentType?: 'video' | 'pdf';
     content?: string;
@@ -298,8 +300,63 @@ const UploadCourseForm: React.FC = () => {
     setIsAlertModalOpen(true);
   };
 
-  const isValidHttpsPdfUrl = (url: string) =>
-    /^https:\/\/.+\.pdf(?:[?#].*)?$/i.test(url.trim());
+  const isValidHttpsDocumentUrl = (url: string) =>
+    /^https:\/\/.+\.(pdf|pptx)(?:[?#].*)?$/i.test(url.trim());
+
+  const extractDocumentText = async (url?: string) => {
+    const trimmedUrl = url?.trim();
+
+    if (!trimmedUrl) {
+      return '';
+    }
+
+    try {
+      const response = await fetch('/api/extract-document-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: trimmedUrl }),
+      });
+      const data = (await response.json()) as { text?: string; error?: string };
+
+      if (!response.ok || data.error) {
+        console.warn('Document text extraction skipped:', data.error ?? response.statusText);
+        return '';
+      }
+
+      return data.text ?? '';
+    } catch (error) {
+      console.warn('Document text extraction failed:', error);
+      return '';
+    }
+  };
+
+  const withExtractedCourseDocuments = async (modules: CourseData['modules']) => {
+    const updatedModules: CourseData['modules'] = {};
+
+    for (const [moduleKey, module] of Object.entries(modules)) {
+      const slidePdfUrl = module.slidePdfUrl?.trim() ?? '';
+      const slideText = slidePdfUrl ? await extractDocumentText(slidePdfUrl) : '';
+
+      updatedModules[moduleKey] = {
+        ...module,
+        slidePdfUrl,
+        slideText,
+        lessons: await Promise.all(
+          (module.lessons ?? []).map(async (lesson) => {
+            const pdfUrl = lesson.pdfUrl?.trim() ?? '';
+
+            return {
+              ...lesson,
+              pdfUrl,
+              pdfText: pdfUrl ? await extractDocumentText(pdfUrl) : '',
+            };
+          }),
+        ),
+      };
+    }
+
+    return updatedModules;
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -469,6 +526,7 @@ const UploadCourseForm: React.FC = () => {
       updatedModules[moduleKey].lessons[lessonIndex] = {
         ...updatedModules[moduleKey].lessons[lessonIndex],
         [field]: value,
+        ...(field === 'pdfUrl' ? { pdfText: '' } : {}),
       };
       return {
         ...prevState,
@@ -501,6 +559,7 @@ const UploadCourseForm: React.FC = () => {
         [moduleKey]: {
           title: '',
           slidePdfUrl: '',
+          slideText: '',
           lessons: [],
           quiz: {
             questions: Array(5).fill(null).map(() => ({
@@ -534,6 +593,7 @@ const UploadCourseForm: React.FC = () => {
         title: string;
         videoUrl: string;
         pdfUrl?: string;
+        pdfText?: string;
         description: string;
         contentType: 'video' | 'pdf';
         content?: string;
@@ -541,6 +601,7 @@ const UploadCourseForm: React.FC = () => {
         title: '',
         videoUrl: '',
         pdfUrl: '',
+        pdfText: '',
         description: '',
         contentType: 'video',
       };
@@ -639,12 +700,12 @@ const UploadCourseForm: React.FC = () => {
 
     const invalidModuleSlide = Object.entries(courseData.modules).find(([, module]) => {
       const slideUrl = module.slidePdfUrl?.trim();
-      return Boolean(slideUrl) && !isValidHttpsPdfUrl(slideUrl || '');
+      return Boolean(slideUrl) && !isValidHttpsDocumentUrl(slideUrl || '');
     });
 
     if (invalidModuleSlide) {
       const moduleLabel = invalidModuleSlide[0].replace(/^module/i, '') || invalidModuleSlide[0];
-      openAlert(`Module ${moduleLabel} slide URL must be a valid HTTPS .pdf link.`);
+      openAlert(`Module ${moduleLabel} slide URL must be a valid HTTPS .pdf or .pptx link.`);
       return;
     }
 
@@ -674,6 +735,7 @@ const UploadCourseForm: React.FC = () => {
 
       const coursePayload = {
         ...courseData,
+        modules: await withExtractedCourseDocuments(courseData.modules),
         profileImg: profileImgUrl,
         thumbnail: thumbnailUrl,
         categories: selectedCategory,

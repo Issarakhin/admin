@@ -25,6 +25,7 @@
     "lucide-react": "^0.542.0",
     "luxon": "^3.7.1",
     "next": "^15.5.7",
+    "officeparser": "^6.1.1",
     "react": "^19.1.2",
     "react-dom": "^19.1.2",
     "react-dropzone": "^14.3.8",
